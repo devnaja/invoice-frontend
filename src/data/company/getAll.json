@@ -1,0 +1,92 @@
+{
+  "data": [
+    {
+      "id": 1,
+      "attributes": {
+        "name": "Tomta Technology",
+        "token": "TT456789234231dfv2345",
+        "TIN": "10021",
+        "SST": "6",
+        "MSIC": "2321",
+        "tourismTax": "10",
+        "createdAt": "2023-12-27T07:30:46.259Z",
+        "updatedAt": "2023-12-27T07:51:33.552Z",
+        "publishedAt": "2023-12-27T07:51:33.543Z",
+        "identifier": "TTID01",
+        "companyID": "TT01"
+      }
+    },
+    {
+      "id": 2,
+      "attributes": {
+        "name": "Gosum Consulting",
+        "token": "GS54353523452324342",
+        "TIN": "AA6457454",
+        "SST": "6",
+        "MSIC": "5435",
+        "tourismTax": "10",
+        "createdAt": "2023-12-27T07:55:56.667Z",
+        "updatedAt": "2023-12-27T08:45:50.935Z",
+        "publishedAt": "2023-12-27T08:45:50.925Z",
+        "identifier": "GSID001",
+        "companyID": "GS01"
+      }
+    },
+    {
+      "id": 3,
+      "attributes": {
+        "name": "Tealive",
+        "token": "TL567890vbnm2345678",
+        "TIN": "AA234567",
+        "SST": "8",
+        "MSIC": "3456",
+        "tourismTax": "15",
+        "createdAt": "2023-12-27T08:11:30.414Z",
+        "updatedAt": "2023-12-27T08:11:31.392Z",
+        "publishedAt": "2023-12-27T08:11:31.382Z",
+        "identifier": "Qwertyu",
+        "companyID": "TL001"
+      }
+    },
+    {
+      "id": 4,
+      "attributes": {
+        "name": "Inside Scoop",
+        "token": "IS1234564321dfgv21",
+        "TIN": "AA98765432",
+        "SST": "5",
+        "MSIC": "4878",
+        "tourismTax": "5",
+        "createdAt": "2023-12-27T08:56:13.373Z",
+        "updatedAt": "2023-12-27T08:56:15.098Z",
+        "publishedAt": "2023-12-27T08:56:15.091Z",
+        "identifier": "094909322",
+        "companyID": "IS001"
+      }
+    },
+    {
+      "id": 6,
+      "attributes": {
+        "name": "Montigo Sdn Bhd",
+        "token": "4537829044",
+        "TIN": "AA64392749",
+        "SST": "6",
+        "MSIC": "MT5238432",
+        "tourismTax": "10",
+        "createdAt": "2023-12-28T07:37:48.354Z",
+        "updatedAt": "2023-12-28T07:37:48.354Z",
+        "publishedAt": "2023-12-28T07:37:48.346Z",
+        "identifier": null,
+        "companyID": null
+      }
+    }
+  ],
+  "meta": {
+    "pagination": {
+      "page": 1,
+      "pageSize": 25,
+      "pageCount": 1,
+      "total": 5
+    }
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "data": {
+    "id": 1,
+    "attributes": {
+      "name": "Tomta Technology",
+      "token": "TT456789234231dfv2345",
+      "TIN": "10021",
+      "SST": "6",
+      "MSIC": "2321",
+      "tourismTax": "10",
+      "createdAt": "2023-12-27T07:30:46.259Z",
+      "updatedAt": "2023-12-27T07:51:33.552Z",
+      "publishedAt": "2023-12-27T07:51:33.543Z",
+      "identifier": "TTID01",
+      "companyID": "TT01"
+    }
+  },
+  "meta": {}
+}
