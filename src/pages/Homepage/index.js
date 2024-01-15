@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useEffect, useState } from "react";
 import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
@@ -8,6 +8,8 @@ import Orders from "pages/Homepage/orders";
 import PrivateLayout from "layouts/privateLayout";
 
 export default function Homepage() {
+  // const user = React.useContext(useUser);
+  // console.log("user", user);
   return (
     <PrivateLayout>
       <Container sx={{ mt: 4, mb: 4 }}>

@@ -9,6 +9,7 @@ import PayableList from "./pages/Payable/index";
 import Setting from "./pages/Setting/index";
 import DetailsInfo from "pages/Receivable/details";
 import DetailsInfoPayable from "pages/Payable/details";
+import ForgotPassword from "pages/Auth/forgotPassword";
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
         <Route path="/" element={<Homepage />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/signin" element={<Signin />} />
+        <Route path="/forgotPassword" element={<ForgotPassword />} />
         <Route path="/account-receivable" element={<ReceivableList />} />
         <Route path="/account-receivable/:id" element={<DetailsInfo />} />
         <Route path="/account-payable" element={<PayableList />} />

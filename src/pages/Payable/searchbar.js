@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Box, Typography, Autocomplete, TextField } from "@mui/material";
 import FilterPrducts from "./filterProducts";
-import { fetchdata } from "../../api/fetchData";
+import { getAll } from "../../api/users";
 
 function SearchBar(props) {
   const [input, setInput] = useState("");
@@ -19,7 +19,7 @@ function SearchBar(props) {
   };
 
   useEffect(() => {
-    fetchdata().then((res) => setList(res));
+    getAll().then((res) => setList(res));
   }, []);
 
   return (

@@ -4,6 +4,13 @@ import ReactDOM from "react-dom/client";
 import App from "./App";
 import CustomTheme from "./customTheme";
 import { ThemeProvider } from "@mui/material/styles";
+import axios from "axios";
+
+// set main base url
+axios.defaults.baseURL = "http://localhost:1337/api";
+// Bearer Token
+// axios.defaults.headers.common[`Authorization`] =
+//   "Bearer " + localStorage.getItem("token");
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(

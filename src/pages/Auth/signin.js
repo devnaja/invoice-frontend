@@ -1,51 +1,56 @@
-import * as React from "react";
-import Avatar from "@mui/material/Avatar";
-import Button from "@mui/material/Button";
-import CssBaseline from "@mui/material/CssBaseline";
-import TextField from "@mui/material/TextField";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Checkbox from "@mui/material/Checkbox";
-import Link from "@mui/material/Link";
-import Grid from "@mui/material/Grid";
-import Box from "@mui/material/Box";
+import React, { useState } from "react";
+import {
+  Avatar,
+  Button,
+  CssBaseline,
+  TextField,
+  FormControlLabel,
+  Checkbox,
+  Link,
+  Grid,
+  Box,
+  Typography,
+  Container,
+} from "@mui/material";
+import axios from "axios";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
-import Typography from "@mui/material/Typography";
-import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { Navigate, useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
 import PublicLayout from "layouts/publicLayout";
-import { NavLink } from "react-router-dom";
-
-function Copyright(props) {
-  return (
-    <Typography
-      variant="body2"
-      color="text.secondary"
-      align="center"
-      {...props}
-    >
-      {"Copyright © "}
-      <Link color="inherit" href="https://mui.com/">
-        Your Website
-      </Link>{" "}
-      {new Date().getFullYear()}
-      {"."}
-    </Typography>
-  );
-}
+import { auth } from "api/Auth/login";
+import Copyright from "components/copyright";
 
 const defaultTheme = createTheme();
 
-// TODO remove, this demo shouldn't need to reset the theme.
-
 export default function Signin() {
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get("email"),
-      password: data.get("password"),
-    });
+  const navigate = useNavigate();
+  const [data, setData] = useState({});
+  const [loggedIn, setLoggedIn] = useState(false);
+
+  const handleAccount = (property, event) => {
+    const dataCopy = { ...data };
+    dataCopy[property] = event.target.value;
+    setData(dataCopy);
   };
+
+  const handleSubmit = async () => {
+    try {
+      const result = await auth(data);
+      setLoggedIn(true);
+      navigate("/");
+      return result;
+    } catch (error) {
+      // Handle the error if needed
+      console.error("Authentication failed!", error);
+    }
+  };
+
+  if (loggedIn) {
+    <Navigate to="/" />;
+  } else {
+    <Navigate to="/signin" />;
+  }
 
   return (
     <PublicLayout>
@@ -64,13 +69,9 @@ export default function Signin() {
               <LockOutlinedIcon />
             </Avatar>
 
-            <Box
-              component="form"
-              onSubmit={handleSubmit}
-              noValidate
-              sx={{ mt: 1 }}
-            >
+            <Box sx={{ mt: 1 }}>
               <TextField
+                onChange={(event) => handleAccount("identifier", event)}
                 margin="normal"
                 required
                 fullWidth
@@ -80,6 +81,7 @@ export default function Signin() {
                 autoFocus
               />
               <TextField
+                onChange={(event) => handleAccount("password", event)}
                 margin="normal"
                 required
                 fullWidth
@@ -97,19 +99,19 @@ export default function Signin() {
                   justifyContent: "center",
                   alignItems: "center",
                 }}
-                fullWidth
               />
-              <NavLink to="/">
-                <Button
-                  type="submit"
-                  fullWidth
-                  variant="contained"
-                  sx={{ mt: 3, mb: 2 }}
-                >
-                  Sign In
-                </Button>
-              </NavLink>
-              <Grid container>
+
+              <Button
+                type="submit"
+                fullWidth
+                variant="contained"
+                color="primary"
+                onClick={handleSubmit}
+              >
+                Sign In
+              </Button>
+
+              <Grid container sx={{ mt: 2 }}>
                 <Grid item xs>
                   <Link href="/forgotPassword" variant="body2">
                     Forgot password?
@@ -123,7 +125,7 @@ export default function Signin() {
               </Grid>
             </Box>
           </Box>
-          <Copyright sx={{ mt: 8, mb: 4 }} />
+          <Copyright />
         </Container>
       </ThemeProvider>
     </PublicLayout>
