@@ -8,21 +8,25 @@ function handleClick(event) {
   console.info("You clicked a breadcrumb.");
 }
 
-export default function BasicBreadcrumbs() {
+export default function BasicBreadcrumbs({ first, second, third }) {
   return (
     <div role="presentation" onClick={handleClick}>
       <Breadcrumbs aria-label="breadcrumb">
-        <Link underline="hover" color="inherit" href="/">
-          MUI
-        </Link>
-        <Link
-          underline="hover"
-          color="inherit"
-          href="/material-ui/getting-started/installation/"
-        >
-          Core
-        </Link>
-        <Typography color="text.primary">Breadcrumbs</Typography>
+        {first && (
+          <Link underline="hover" color="inherit" href="/">
+            {first}
+          </Link>
+        )}
+        {second && (
+          <Link
+            underline="hover"
+            color="inherit"
+            href="/material-ui/getting-started/installation/"
+          >
+            {second}
+          </Link>
+        )}
+        {third && <Typography color="text.primary">{third}</Typography>}
       </Breadcrumbs>
     </div>
   );

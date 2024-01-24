@@ -18,7 +18,14 @@ export default function TableList(props) {
   console.log("rows", rows);
 
   return (
-    <TableContainer component={Paper}>
+    <TableContainer
+      component={Paper}
+      sx={{
+        border: "1px solid black",
+        marginLeft: "auto",
+        marginRight: "auto",
+      }}
+    >
       <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
         <TableHead>
           <TableRow>

@@ -52,7 +52,7 @@ export default function ForgotPassword() {
         <CssBaseline />
         <Box
           sx={{
-            marginTop: 8,
+            marginTop: 10,
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
@@ -84,6 +84,7 @@ export default function ForgotPassword() {
               type="submit"
               variant="contained"
               color="primary"
+              sx={{ mt: 3, mb: 2 }}
               onClick={handleSubmit}
             >
               Reset Password

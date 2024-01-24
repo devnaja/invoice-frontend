@@ -10,23 +10,37 @@ import Setting from "./pages/Setting/index";
 import DetailsInfo from "pages/Receivable/details";
 import DetailsInfoPayable from "pages/Payable/details";
 import ForgotPassword from "pages/Auth/forgotPassword";
+import { ToastContainer } from "react-toastify";
+import PrivateRoutes from "./utils/privateRoutes";
+import History from "pages/History";
 
 function App() {
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<Homepage />} />
-        <Route path="/signup" element={<Signup />} />
-        <Route path="/signin" element={<Signin />} />
-        <Route path="/forgotPassword" element={<ForgotPassword />} />
-        <Route path="/account-receivable" element={<ReceivableList />} />
-        <Route path="/account-receivable/:id" element={<DetailsInfo />} />
-        <Route path="/account-payable" element={<PayableList />} />
-        <Route path="/account-payable/:id" element={<DetailsInfoPayable />} />
-        {/* <Route path="/account-payable" element={<Payable />} /> */}
-        <Route path="/setting" element={<Setting />} />
-      </Routes>
-    </Router>
+    <React.Fragment>
+      <Router>
+        <Routes>
+          <Route path="/signup" element={<Signup />} />
+          <Route path="/signin" element={<Signin />} />
+          <Route path="/forgotPassword" element={<ForgotPassword />} />
+
+          <Route element={<PrivateRoutes />}>
+            <Route path="/" element={<Homepage />} />
+
+            <Route path="/account-receivable" element={<ReceivableList />} />
+            <Route path="/account-receivable/:id" element={<DetailsInfo />} />
+            <Route path="/account-payable" element={<PayableList />} />
+            <Route
+              path="/account-payable/:id"
+              element={<DetailsInfoPayable />}
+            />
+            <Route path="/request-history" element={<History />} />
+            {/* <Route path="/account-payable" element={<Payable />} /> */}
+            <Route path="/setting" element={<Setting />} />
+          </Route>
+        </Routes>
+      </Router>
+      <ToastContainer />
+    </React.Fragment>
   );
 }
 

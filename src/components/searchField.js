@@ -16,10 +16,17 @@ const Search = styled("div")(({ theme }) => ({
     backgroundColor: alpha(theme.palette.neutral.medium),
   },
   marginTop: "32px",
-  width: "30%",
   [theme.breakpoints.up("sm")]: {
-    // marginLeft: theme.spacing(1),
-    // width: "auto",
+    marginLeft: theme.spacing(1),
+    width: "100%",
+  },
+  [theme.breakpoints.up("md")]: {
+    marginLeft: theme.spacing(1),
+    width: "70%",
+  },
+  [theme.breakpoints.up("xl")]: {
+    marginLeft: theme.spacing(1),
+    width: "50%",
   },
 }));
 
@@ -40,17 +47,10 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
     padding: theme.spacing(1, 1, 1, 0),
     // vertical padding + font size from searchIcon
     paddingLeft: `calc(1em + ${theme.spacing(4)})`,
-    transition: theme.transitions.create("width"),
-    [theme.breakpoints.up("sm")]: {
-      width: "12ch",
-      "&:focus": {
-        width: "20ch",
-      },
-    },
   },
 }));
 
-export default function SearchField() {
+const SearchField = () => {
   return (
     <Box sx={{ flexGrow: 1 }}>
       <Search>
@@ -64,4 +64,32 @@ export default function SearchField() {
       </Search>
     </Box>
   );
-}
+};
+
+// const SearchIconWrapper = ({ children }) => (
+//   <Box
+//     sx={{
+//       padding: 1,
+//       pointerEvents: "none",
+//       display: "flex",
+//       alignItems: "center",
+//       justifyContent: "center",
+//     }}
+//   >
+//     {children}
+//   </Box>
+// );
+
+// const StyledInputBase = ({ ...props }) => (
+//   <InputBase
+//     sx={{
+//       width: "100%", // Set width to 100% by default
+//       "@media (min-width: 600px)": {
+//         width: "50%", // Set width to 50% on medium-sized screens
+//       },
+//     }}
+//     {...props}
+//   />
+// );
+
+export default SearchField;

@@ -1,26 +1,39 @@
 import React, { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
 import { alpha } from "@mui/material/styles";
-import Box from "@mui/material/Box";
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
-import TablePagination from "@mui/material/TablePagination";
-import TableRow from "@mui/material/TableRow";
-import TableSortLabel from "@mui/material/TableSortLabel";
-import Toolbar from "@mui/material/Toolbar";
-import Typography from "@mui/material/Typography";
-import Paper from "@mui/material/Paper";
-import Checkbox from "@mui/material/Checkbox";
+import {
+  Box,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TablePagination,
+  TableRow,
+  TableSortLabel,
+  Typography,
+  Paper,
+  Checkbox,
+  Toolbar,
+} from "@mui/material";
+import axios from "axios";
 import IconButton from "@mui/material/IconButton";
 import Tooltip from "@mui/material/Tooltip";
 import DeleteIcon from "@mui/icons-material/Delete";
 import FilterListIcon from "@mui/icons-material/FilterList";
 import { visuallyHidden } from "@mui/utils";
-import { Skeleton, Button } from "@mui/material";
-import { Link } from "react-router-dom";
+import { Skeleton, Button, styled } from "@mui/material";
+import { Link, Navigate } from "react-router-dom";
+import DateFormatter from "helper/dateFormartter";
+import BasicBreadcrumbs from "components/breadcrumb";
+import SearchField from "components/searchField";
+import ImportButton from "./importBtn";
+import ExportBtn from "./exportBtn";
+import { toast } from "react-toastify";
+import moment from "moment";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import IosShareIcon from "@mui/icons-material/IosShare";
 
 let rows;
 
@@ -54,35 +67,54 @@ function stableSort(array, comparator) {
 
 const headCells = [
   {
-    id: "companyID",
+    id: "name",
     numeric: false,
     disablePadding: true,
-    label: "Company ID",
+    label: "Company Name",
   },
   {
-    id: "eInvVer",
+    id: "eInvNum",
+    numeric: false,
+    disablePadding: true,
+    label: "E Invoice Number",
+  },
+  {
+    id: "supplierName",
+    numeric: false,
+    disablePadding: true,
+    label: "Supplier Name",
+  },
+  {
+    id: "supEmail",
+    numeric: false,
+    disablePadding: true,
+    label: "Supplier Email",
+  },
+  {
+    id: "buyerName",
+    numeric: false,
+    disablePadding: true,
+    label: "Buyer Name",
+  },
+  {
+    id: "buyEmail",
+    numeric: false,
+    disablePadding: true,
+    label: "Buyer Email",
+  },
+  {
+    id: "eInvType",
     numeric: true,
     disablePadding: false,
-    label: "Invoice Number",
+    label: "e-Invoice Type",
   },
   {
     id: "createdAt",
     numeric: true,
     disablePadding: false,
-    label: "Submitted",
+    label: "Submitted At",
   },
-  {
-    id: "ValidateDate",
-    numeric: true,
-    disablePadding: false,
-    label: "Validated",
-  },
-  {
-    id: "eInvNum",
-    numeric: true,
-    disablePadding: false,
-    label: "e-Invoice Number",
-  },
+
   {
     numeric: false,
     disablePadding: false,
@@ -117,9 +149,9 @@ function EnhancedTableHead(props) {
             }}
           />
         </TableCell>
-        {headCells.map((headCell) => (
+        {headCells.map((headCell, i) => (
           <TableCell
-            key={headCell.id}
+            key={i}
             padding={headCell.disablePadding ? "none" : "normal"}
             sortDirection={orderBy === headCell.id ? order : false}
           >
@@ -210,13 +242,140 @@ EnhancedTableToolbar.propTypes = {
 };
 
 export default function ListingTable({ data }) {
+  const navigate = useNavigate();
+  const dateFormatter = DateFormatter();
   rows = data;
-  let visibleRows = data;
+  // let visibleRows = data;
+  const [visibleRows, setVisibleRows] = React.useState(data);
   const [order, setOrder] = React.useState("desc");
-  const [orderBy, setOrderBy] = React.useState("compID");
+  const [orderBy, setOrderBy] = React.useState("id");
   const [selected, setSelected] = React.useState([]);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(3);
+
+  let dateObject = new Date();
+
+  // Format the Date object as needed
+  let requestDate = moment(dateObject)
+    .utc()
+    .format("YYYY-MM-DDTHH:mm:ss.SSS[Z]");
+  // const [valueofRow, setValueOfRow] = React.useState();
+
+  let rtnDate = moment()
+    .add(1, "days")
+    .utc()
+    .format("YYYY-MM-DDTHH:mm:ss.SSS[Z]");
+
+  const handleClickSet = async (value) => {
+    const body = {
+      supplierName: value.supplierName,
+      buyerName: value.buyerName,
+      invNum: value.eInvNum,
+    };
+
+    let reqtBody = {
+      reqDate: requestDate,
+      reqHeader: "Request for " + value.eInvType,
+      reqBody:
+        value.supplierName + " with tax identification number " + value.supTin,
+      reqParam: "",
+      reqUrl: `/request-history/${value.id}`,
+      rtnDate: rtnDate,
+      rtnHeader: "Result from IRBM",
+      rtnBody: "Success request",
+      rtnStatusCode: "fail",
+      transaction: {
+        connect: [
+          {
+            id: value.id,
+            position: { end: true },
+          },
+        ],
+      },
+    };
+    try {
+      const response = await axios.post(
+        "/request-histories",
+        { data: reqtBody }, // Send each object as payload
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+            Accept: "application/json",
+          },
+        }
+      );
+      let res = response.data.data;
+      // console.log("res", res);
+
+      navigate("/request-history");
+
+      // if(res.status) {
+      //   let rtnBody = {
+      //     transID: value.id,
+      //     reqDate: formattedDateString,
+      //     reqHeader: value.eInvType,
+      //     reqBody: body,
+      //     reqParam: "",
+      //     reqUrl: `/request-history/${value.id}`,
+      //   };
+      // const response = await axios.put(
+      //   "/request-histories",
+      //   { data: rtnBody }, // Send each object as payload
+      //   {
+      //     headers: {
+      //       Authorization: `Bearer ${localStorage.getItem("token")}`,
+      //       Accept: "application/json",
+      //     },
+      //   }
+      // );
+
+      toast.success("Request has been submitted.", {
+        position: "top-right",
+        autoClose: 3000,
+      });
+    } catch (error) {
+      let errorList = error.response.data.error.details.errors;
+      console.error("An error occurred:", errorList);
+      for (const list of errorList) {
+        toast.error(list.message + " " + list.path[0], {
+          position: "top-right",
+          autoClose: 3000,
+        });
+      }
+    }
+  };
+
+  const submitRequest = () => {
+    // const a = event;
+    // console.log("event", event);
+    // try {
+    //   const response = await axios.post(
+    //     "/request-history",
+    //     { data: dataItem }, // Send each object as payload
+    //     {
+    //       headers: {
+    //         Authorization: `Bearer ${localStorage.getItem("token")}`,
+    //         Accept: "application/json",
+    //       },
+    //     }
+    //   );
+    //   const res = response.data.data;
+    //   toast.success("List payable transactions created successfully.", {
+    //     position: "top-right",
+    //     autoClose: 3000,
+    //   });
+    //   setOpen(false);
+    // } catch (error) {
+    //   let errorList = error.response.data.error.details.errors;
+    //   console.error("An error occurred:", errorList);
+    //   for (const list of errorList) {
+    //     toast.error(list.message + " " + list.path[0], {
+    //       position: "top-right",
+    //       autoClose: 3000,
+    //     });
+    //   }
+    // }
+  };
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === "asc";
@@ -267,21 +426,19 @@ export default function ListingTable({ data }) {
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
 
-  visibleRows = React.useMemo(
-    () =>
-      stableSort(rows, getComparator(order, orderBy)).slice(
-        page * rowsPerPage,
-        page * rowsPerPage + rowsPerPage
-      ),
-    [order, orderBy, page, rowsPerPage]
-  );
+  // visibleRows = React.useMemo(
+  //   () =>
+  //     stableSort(rows, getComparator(order, orderBy)).slice(
+  //       page * rowsPerPage,
+  //       page * rowsPerPage + rowsPerPage
+  //     ),
+  //   [order, orderBy, page, rowsPerPage]
+  // );
 
-  console.log("visibleRows", visibleRows);
-
-  const handleChange = (event, value) => {
-    console.log("event", event);
-    setPage(value);
-  };
+  // const handleChange = (event, value) => {
+  //   console.log("event", event);
+  //   setPage(value);
+  // };
 
   // Function to render skeleton rows
   const renderSkeletonRows = (count) => {
@@ -294,90 +451,140 @@ export default function ListingTable({ data }) {
     ));
   };
 
+  const Root = styled("div")(({ theme }) => ({
+    padding: theme.spacing(1),
+    [theme.breakpoints.down("md")]: {
+      display: "block",
+    },
+    [theme.breakpoints.up("md")]: {
+      display: "flex",
+    },
+  }));
   return (
-    <Box sx={{ mt: 4, mb: 4 }}>
-      <Paper sx={{ width: "100%", mb: 2 }}>
-        <EnhancedTableToolbar numSelected={selected.length} />
-        <TableContainer>
-          <Table aria-labelledby="tableTitle">
-            <EnhancedTableHead
-              numSelected={selected.length}
-              order={order}
-              orderBy={orderBy}
-              onSelectAllClick={handleSelectAllClick}
-              onRequestSort={handleRequestSort}
-              rowCount={rows.length}
-            />
-            {visibleRows.length === 0 ? (
-              // Render skeleton rows when visibleRows is empty
-              renderSkeletonRows(visibleRows.length) // Adjust the count as needed
-            ) : (
-              // Render actual rows
-              <>
-                <TableBody>
-                  {visibleRows.map((row, index) => {
-                    const isItemSelected = isSelected(row.id);
-                    const labelId = `enhanced-table-checkbox-${index}`;
+    <Box>
+      <BasicBreadcrumbs first="Payable" second="Listing" />
+      <Root>
+        <SearchField />
+        <Box display="flex" justifyContent="end">
+          <ImportButton />
+          <ExportBtn />
+        </Box>
+      </Root>
+      <Box sx={{ mt: 4, mb: 4 }}>
+        <Paper sx={{ width: "100%", mb: 2 }}>
+          <EnhancedTableToolbar numSelected={selected.length} />
+          <TableContainer>
+            <Table aria-labelledby="tableTitle">
+              <EnhancedTableHead
+                numSelected={selected.length}
+                order={order}
+                orderBy={orderBy}
+                onSelectAllClick={handleSelectAllClick}
+                onRequestSort={handleRequestSort}
+                rowCount={rows.length}
+              />
+              {visibleRows.length === 0 ? (
+                <TableRow>
+                  <TableCell colSpan={12}>
+                    <Typography textAlign="center" color="lightgray">
+                      No Data Available
+                    </Typography>
+                  </TableCell>
+                </TableRow>
+              ) : (
+                // Render actual rows
+                <>
+                  <TableBody>
+                    {visibleRows.map((row, index) => {
+                      console.log(index, row.company);
+                      const isItemSelected = isSelected(row.id);
+                      const labelId = `enhanced-table-checkbox-${index}`;
 
-                    return (
-                      <TableRow hover key={row.id}>
-                        <TableCell
-                          padding="checkbox"
-                          selected={isItemSelected}
-                          sx={{ cursor: "pointer" }}
-                          onClick={(event) => handleClick(event, row.id)}
-                          role="checkbox"
-                          aria-checked={isItemSelected}
-                          tabIndex={-1}
-                        >
-                          <Checkbox
-                            color="primary"
-                            checked={isItemSelected}
-                            inputProps={{
-                              "aria-labelledby": labelId,
-                            }}
-                          />
-                        </TableCell>
-
-                        <TableCell>{row.id}</TableCell>
-                        <TableCell>{row.eInvNum}</TableCell>
-                        <TableCell>{row.createdAt}</TableCell>
-                        <TableCell>{row.validateDate}</TableCell>
-                        <TableCell>{row.eInvNum}</TableCell>
-                        <TableCell>
-                          <Link
-                            to={`/account-payable/${row.id}`}
-                            state={{ dataRows: { row } }}
+                      return (
+                        <TableRow hover key={row.id}>
+                          <TableCell
+                            padding="checkbox"
+                            selected={isItemSelected}
+                            sx={{ cursor: "pointer" }}
+                            onClick={(event) => handleClick(event, row.id)}
+                            role="checkbox"
+                            aria-checked={isItemSelected}
+                            tabIndex={-1}
                           >
-                            <Button variant="contained" size="small">
-                              View
-                            </Button>
-                          </Link>
-                        </TableCell>
-                      </TableRow>
-                    );
-                  })}
-                  {emptyRows > 0 && (
-                    <TableRow>
-                      <TableCell colSpan={6} />
-                    </TableRow>
-                  )}
-                </TableBody>
-              </>
-            )}
-          </Table>
-        </TableContainer>
-        <TablePagination
-          rowsPerPageOptions={[1, 3, 5]}
-          component="div"
-          count={rows.length}
-          rowsPerPage={rowsPerPage}
-          page={page}
-          onPageChange={handleChangePage}
-          onRowsPerPageChange={handleChangeRowsPerPage}
-        />
+                            <Checkbox
+                              color="primary"
+                              checked={isItemSelected}
+                              inputProps={{
+                                "aria-labelledby": labelId,
+                              }}
+                            />
+                          </TableCell>
 
-        {/* <Box display="flex" justifyContent="space-between" p={2}>
+                          <TableCell>
+                            {row.company?.data?.attributes?.name || "-"}
+                          </TableCell>
+                          <TableCell>{row.eInvNum}</TableCell>
+                          <TableCell>{row.supplierName}</TableCell>
+                          <TableCell>{row.supEmail}</TableCell>
+                          <TableCell>{row.buyerName}</TableCell>
+                          <TableCell>{row.buyEmail}</TableCell>
+
+                          <TableCell>{row.eInvType}</TableCell>
+                          <TableCell>
+                            {dateFormatter.format(row.createdAt)}
+                          </TableCell>
+
+                          <TableCell display="flex">
+                            <Box></Box>
+                            <Link
+                              to={`/account-payable/${row.id}`}
+                              state={{ dataRows: { row } }}
+                            >
+                              <Button size="small">
+                                <Tooltip
+                                  title="View Transaction"
+                                  placement="right"
+                                >
+                                  <VisibilityIcon />
+                                </Tooltip>
+                              </Button>
+                            </Link>
+
+                            <Button
+                              size="small"
+                              onClick={() => {
+                                handleClickSet(row);
+                              }}
+                            >
+                              <Tooltip title="Submit request" placement="right">
+                                <IosShareIcon />
+                              </Tooltip>
+                            </Button>
+                          </TableCell>
+                        </TableRow>
+                      );
+                    })}
+                    {emptyRows > 0 && (
+                      <TableRow>
+                        <TableCell colSpan={11} />
+                      </TableRow>
+                    )}
+                  </TableBody>
+                </>
+              )}
+            </Table>
+          </TableContainer>
+          <TablePagination
+            rowsPerPageOptions={[1, 3, 5]}
+            component="div"
+            count={rows.length}
+            rowsPerPage={rowsPerPage}
+            page={page}
+            onPageChange={handleChangePage}
+            onRowsPerPageChange={handleChangeRowsPerPage}
+          />
+
+          {/* <Box display="flex" justifyContent="space-between" p={2}>
           <Typography>Page: {page + 1}</Typography>
           <Pagination
             count={rows.meta.pageCount}
@@ -385,7 +592,8 @@ export default function ListingTable({ data }) {
             onChange={handleChange}
           />
         </Box> */}
-      </Paper>
+        </Paper>
+      </Box>
     </Box>
   );
 }

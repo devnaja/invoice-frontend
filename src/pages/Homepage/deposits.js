@@ -2,25 +2,30 @@ import * as React from "react";
 import Link from "@mui/material/Link";
 import Typography from "@mui/material/Typography";
 import Title from "components/title";
+import moment from "moment";
 
 function preventDefault(event) {
   event.preventDefault();
 }
 
-export default function Deposits() {
+export default function Deposits({ data }) {
+  let todayDate = moment().format("Do MMMM YYYY");
+  // let requestDate = moment(todayDate);
+
   return (
     <React.Fragment>
-      <Title>Recent Deposits</Title>
+      <Title>Recent Tax Amount</Title>
       <Typography component="p" variant="h4">
-        $3,024.00
+        RM {data}
       </Typography>
-      <Typography color="text.secondary" sx={{ flex: 1 }}>
-        on 15 March, 2019
-      </Typography>
+
       <div>
-        <Link color="primary" href="#" onClick={preventDefault}>
+        <Typography color="text.secondary" sx={{}}>
+          {todayDate}
+        </Typography>
+        {/* <Link color="primary" href="#" onClick={preventDefault}>
           View balance
-        </Link>
+        </Link> */}
       </div>
     </React.Fragment>
   );

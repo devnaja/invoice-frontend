@@ -12,6 +12,7 @@ import PrivateLayout from "layouts/privateLayout";
 import { useLocation } from "react-router-dom";
 import DateFormatter from "helper/dateFormartter";
 import TableList from "./tableList";
+import BasicBreadcrumbs from "components/breadcrumb";
 
 const DetailItem = ({ label, value }) => (
   <Box display="flex" alignItems="center" mb={1}>
@@ -86,6 +87,7 @@ const DetailsInfoPayable = () => {
     });
   };
 
+  console.log("11", data.buyerInfo);
   useEffect(() => {
     const { dataRows } = location.state;
     structredList(dataRows);
@@ -93,6 +95,8 @@ const DetailsInfoPayable = () => {
 
   return (
     <PrivateLayout>
+      <BasicBreadcrumbs first="Receivable" second="Details" />
+
       <CssBaseline />
       <Paper elevation={3} sx={{ p: 3 }}>
         <Typography fontWeight="fontWeightMedium" variant="h5" mb={2}>
@@ -230,32 +234,16 @@ const DetailsInfoPayable = () => {
                 </Divider>
               </Typography>
               <Grid item xs={12}>
-                <DetailItem label="Name" value={data.supplierInfo.name} />
-                <DetailItem label="Email" value={data.supplierInfo.email} />
-                <DetailItem
-                  label="Phone Number"
-                  value={data.supplierInfo.phone}
-                />
-                <DetailItem
-                  label="Account Number"
-                  value={data.supplierInfo.accNum}
-                />
+                <DetailItem label="ID" value={data.buyerInfo.id} />
+                <DetailItem label="Name" value={data.buyerInfo.name} />
+                <DetailItem label="Email" value={data.buyerInfo.email} />
+                <DetailItem label="Phone Number" value={data.buyerInfo.phone} />
+
                 <DetailItem
                   label="Tax Identification Number"
-                  value={data.supplierInfo.tin}
+                  value={data.buyerInfo.tin}
                 />
-                <DetailItem
-                  label="SST Number"
-                  value={data.supplierInfo.sstNum}
-                />
-                <DetailItem
-                  label="Tourism Tax Number"
-                  value={data.supplierInfo.tourismTaxNum}
-                />
-                <DetailItem
-                  label="MSIC Number"
-                  value={data.supplierInfo.msicNum}
-                />
+                <DetailItem label="SST Number" value={data.buyerInfo.sstNum} />
               </Grid>
             </Grid>
           </Grid>

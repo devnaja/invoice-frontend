@@ -1,39 +1,29 @@
 import React, { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
 import { alpha } from "@mui/material/styles";
-import {
-  Box,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TablePagination,
-  TableRow,
-  TableSortLabel,
-  Typography,
-  Paper,
-  Checkbox,
-  Toolbar,
-} from "@mui/material";
-import axios from "axios";
+import Box from "@mui/material/Box";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TablePagination from "@mui/material/TablePagination";
+import TableRow from "@mui/material/TableRow";
+import TableSortLabel from "@mui/material/TableSortLabel";
+import Toolbar from "@mui/material/Toolbar";
+import Typography from "@mui/material/Typography";
+import Paper from "@mui/material/Paper";
+import Checkbox from "@mui/material/Checkbox";
 import IconButton from "@mui/material/IconButton";
 import Tooltip from "@mui/material/Tooltip";
 import DeleteIcon from "@mui/icons-material/Delete";
 import FilterListIcon from "@mui/icons-material/FilterList";
 import { visuallyHidden } from "@mui/utils";
-import { Skeleton, Button, styled } from "@mui/material";
-import { Link, Navigate } from "react-router-dom";
+import { Skeleton, Button, styled, Chip } from "@mui/material";
+import { Link } from "react-router-dom";
 import DateFormatter from "helper/dateFormartter";
 import BasicBreadcrumbs from "components/breadcrumb";
 import SearchField from "components/searchField";
-import ImportButton from "./importBtn";
-import ExportBtn from "./exportBtn";
-import { toast } from "react-toastify";
-import moment from "moment";
-import VisibilityIcon from "@mui/icons-material/Visibility";
-import IosShareIcon from "@mui/icons-material/IosShare";
 
 let rows;
 
@@ -67,61 +57,86 @@ function stableSort(array, comparator) {
 
 const headCells = [
   {
-    id: "name",
+    id: "id",
     numeric: false,
     disablePadding: true,
-    label: "Company Name",
+    label: "ID",
   },
   {
-    id: "eInvNum",
+    id: "transID",
     numeric: false,
     disablePadding: true,
-    label: "E Invoice Number",
+    label: "Transaction ID",
   },
   {
-    id: "supplierName",
+    id: "tranType",
     numeric: false,
     disablePadding: true,
-    label: "Supplier Name",
-  },
-  {
-    id: "supEmail",
-    numeric: false,
-    disablePadding: true,
-    label: "Supplier Email",
-  },
-  {
-    id: "buyerName",
-    numeric: false,
-    disablePadding: true,
-    label: "Buyer Name",
-  },
-  {
-    id: "buyEmail",
-    numeric: false,
-    disablePadding: true,
-    label: "Buyer Email",
-  },
-  {
-    id: "eInvType",
-    numeric: true,
-    disablePadding: false,
-    label: "e-Invoice Type",
-  },
-  {
-    id: "createdAt",
-    numeric: true,
-    disablePadding: false,
-    label: "Submitted At",
+    label: "Transaction Type",
   },
 
   {
+    id: "reqHeader",
     numeric: false,
-    disablePadding: false,
-    label: "Actions",
+    disablePadding: true,
+    label: "Reaquest Header",
   },
+  {
+    id: "reqBody",
+    numeric: false,
+    disablePadding: true,
+    label: "Request Body",
+  },
+  {
+    id: "reqParam",
+    numeric: false,
+    disablePadding: true,
+    label: "Request Param",
+  },
+  {
+    id: "reqURL",
+    numeric: true,
+    disablePadding: false,
+    label: "Request URL",
+  },
+  {
+    id: "reqDate",
+    numeric: false,
+    disablePadding: true,
+    label: "Request Date",
+  },
+
+  {
+    id: "rtnHeader",
+    numeric: true,
+    disablePadding: false,
+    label: "Return Header",
+  },
+  {
+    id: "rtnBody",
+    numeric: true,
+    disablePadding: false,
+    label: "Return Body",
+  },
+  {
+    id: "rtnStatusCode",
+    numeric: true,
+    disablePadding: false,
+    label: "Status Code",
+  },
+  {
+    id: "rtnDate",
+    numeric: true,
+    disablePadding: false,
+    label: "Return Date",
+  },
+
+  // {
+  //   numeric: false,
+  //   disablePadding: false,
+  //   label: "Actions",
+  // },
 ];
-
 function EnhancedTableHead(props) {
   const {
     onSelectAllClick,
@@ -149,11 +164,12 @@ function EnhancedTableHead(props) {
             }}
           />
         </TableCell>
-        {headCells.map((headCell, i) => (
+        {headCells.map((headCell, index) => (
           <TableCell
-            key={i}
+            key={index}
             padding={headCell.disablePadding ? "none" : "normal"}
             sortDirection={orderBy === headCell.id ? order : false}
+            align="center"
           >
             <TableSortLabel
               active={orderBy === headCell.id}
@@ -242,140 +258,16 @@ EnhancedTableToolbar.propTypes = {
 };
 
 export default function ListingTable({ data }) {
-  const navigate = useNavigate();
   const dateFormatter = DateFormatter();
   rows = data;
-  // let visibleRows = data;
-  const [visibleRows, setVisibleRows] = React.useState(data);
+  let visibleRows = data;
+  console.log("1", visibleRows);
+
   const [order, setOrder] = React.useState("desc");
   const [orderBy, setOrderBy] = React.useState("id");
   const [selected, setSelected] = React.useState([]);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(3);
-
-  let todayDate = new Date();
-
-  // Format the Date object as needed
-  let requestDate = moment(todayDate)
-    .utc()
-    .format("YYYY-MM-DDTHH:mm:ss.SSS[Z]");
-  // const [valueofRow, setValueOfRow] = React.useState();
-
-  let rtnDate = moment()
-    .add(1, "days")
-    .utc()
-    .format("YYYY-MM-DDTHH:mm:ss.SSS[Z]");
-
-  const handleClickSet = async (value) => {
-    const body = {
-      supplierName: value.supplierName,
-      buyerName: value.buyerName,
-      invNum: value.eInvNum,
-    };
-
-    let reqtBody = {
-      reqDate: requestDate,
-      reqHeader: "Request for " + value.eInvType,
-      reqBody:
-        value.supplierName + " with tax identification number " + value.supTin,
-      reqParam: "",
-      reqUrl: `/request-history/${value.id}`,
-      rtnDate: rtnDate,
-      rtnHeader: "Result from IRBM",
-      rtnBody: "Success request",
-      rtnStatusCode: "success",
-      transaction: {
-        connect: [
-          {
-            id: value.id,
-            position: { end: true },
-          },
-        ],
-      },
-    };
-    try {
-      const response = await axios.post(
-        "/request-histories",
-        { data: reqtBody }, // Send each object as payload
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-            Accept: "application/json",
-          },
-        }
-      );
-      let res = response.data.data;
-      // console.log("res", res);
-
-      navigate("/request-history");
-
-      // if(res.status) {
-      //   let rtnBody = {
-      //     transID: value.id,
-      //     reqDate: formattedDateString,
-      //     reqHeader: value.eInvType,
-      //     reqBody: body,
-      //     reqParam: "",
-      //     reqUrl: `/request-history/${value.id}`,
-      //   };
-      // const response = await axios.put(
-      //   "/request-histories",
-      //   { data: rtnBody }, // Send each object as payload
-      //   {
-      //     headers: {
-      //       Authorization: `Bearer ${localStorage.getItem("token")}`,
-      //       Accept: "application/json",
-      //     },
-      //   }
-      // );
-
-      toast.success("Request has been submitted.", {
-        position: "top-right",
-        autoClose: 3000,
-      });
-    } catch (error) {
-      let errorList = error.response.data.error.details.errors;
-      console.error("An error occurred:", errorList);
-      for (const list of errorList) {
-        toast.error(list.message + " " + list.path[0], {
-          position: "top-right",
-          autoClose: 3000,
-        });
-      }
-    }
-  };
-
-  const submitRequest = () => {
-    // const a = event;
-    // console.log("event", event);
-    // try {
-    //   const response = await axios.post(
-    //     "/request-history",
-    //     { data: dataItem }, // Send each object as payload
-    //     {
-    //       headers: {
-    //         Authorization: `Bearer ${localStorage.getItem("token")}`,
-    //         Accept: "application/json",
-    //       },
-    //     }
-    //   );
-    //   const res = response.data.data;
-    //   toast.success("List payable transactions created successfully.", {
-    //     position: "top-right",
-    //     autoClose: 3000,
-    //   });
-    //   setOpen(false);
-    // } catch (error) {
-    //   let errorList = error.response.data.error.details.errors;
-    //   console.error("An error occurred:", errorList);
-    //   for (const list of errorList) {
-    //     toast.error(list.message + " " + list.path[0], {
-    //       position: "top-right",
-    //       autoClose: 3000,
-    //     });
-    //   }
-    // }
-  };
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === "asc";
@@ -420,25 +312,24 @@ export default function ListingTable({ data }) {
     setPage(0);
   };
 
+  const resubmit = () => {
+    return;
+  };
+
   const isSelected = (id) => selected.indexOf(id) !== -1;
 
   // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
 
-  // visibleRows = React.useMemo(
-  //   () =>
-  //     stableSort(rows, getComparator(order, orderBy)).slice(
-  //       page * rowsPerPage,
-  //       page * rowsPerPage + rowsPerPage
-  //     ),
-  //   [order, orderBy, page, rowsPerPage]
-  // );
-
-  // const handleChange = (event, value) => {
-  //   console.log("event", event);
-  //   setPage(value);
-  // };
+  visibleRows = React.useMemo(
+    () =>
+      stableSort(rows, getComparator(order, orderBy)).slice(
+        page * rowsPerPage,
+        page * rowsPerPage + rowsPerPage
+      ),
+    [order, orderBy, page, rowsPerPage]
+  );
 
   // Function to render skeleton rows
   const renderSkeletonRows = (count) => {
@@ -460,16 +351,14 @@ export default function ListingTable({ data }) {
       display: "flex",
     },
   }));
+
   return (
     <Box>
       <BasicBreadcrumbs first="Receivable" second="Listing" />
       <Root>
         <SearchField />
-        <Box display="flex" justifyContent="end">
-          <ImportButton />
-          <ExportBtn />
-        </Box>
       </Root>
+
       <Box sx={{ mt: 4, mb: 4 }}>
         <Paper sx={{ width: "100%", mb: 2 }}>
           <EnhancedTableToolbar numSelected={selected.length} />
@@ -492,16 +381,14 @@ export default function ListingTable({ data }) {
                   </TableCell>
                 </TableRow>
               ) : (
-                // Render actual rows
                 <>
                   <TableBody>
                     {visibleRows.map((row, index) => {
-                      console.log(index, row.company);
                       const isItemSelected = isSelected(row.id);
                       const labelId = `enhanced-table-checkbox-${index}`;
 
                       return (
-                        <TableRow hover key={row.id}>
+                        <TableRow hover key={index}>
                           <TableCell
                             padding="checkbox"
                             selected={isItemSelected}
@@ -520,53 +407,63 @@ export default function ListingTable({ data }) {
                             />
                           </TableCell>
 
-                          <TableCell>
-                            {row.company?.data?.attributes?.name || "-"}
+                          <TableCell component="th" scope="row">
+                            {row.id}
                           </TableCell>
-                          <TableCell>{row.eInvNum}</TableCell>
-                          <TableCell>{row.supplierName}</TableCell>
-                          <TableCell>{row.supEmail}</TableCell>
-                          <TableCell>{row.buyerName}</TableCell>
-                          <TableCell>{row.buyEmail}</TableCell>
-
-                          <TableCell>{row.eInvType}</TableCell>
-                          <TableCell>
-                            {dateFormatter.format(row.createdAt)}
+                          <TableCell sx={{ width: "100px" }}>
+                            {row.attributes.transaction.data.id}
+                          </TableCell>
+                          <TableCell sx={{ width: "100px" }}>
+                            {
+                              row.attributes.transaction.data.attributes
+                                .tranType
+                            }
                           </TableCell>
 
-                          <TableCell display="flex">
-                            <Box></Box>
-                            <Link
-                              to={`/account-receivable/${row.id}`}
-                              state={{ dataRows: { row } }}
-                            >
-                              <Button size="small">
-                                <Tooltip
-                                  title="View Transaction"
-                                  placement="right"
-                                >
-                                  <VisibilityIcon />
-                                </Tooltip>
+                          <TableCell>{row.attributes.reqHeader}</TableCell>
+                          <TableCell>{row.attributes.reqBody}</TableCell>
+                          <TableCell>
+                            {row.attributes.reqParam || "-"}
+                          </TableCell>
+
+                          <TableCell>{row.attributes.reqUrl}</TableCell>
+                          <TableCell>
+                            {dateFormatter.format(row.attributes.reqDate)}
+                          </TableCell>
+
+                          <TableCell>{row.attributes.rtnHeader}</TableCell>
+                          <TableCell>{row.attributes.rtnBody}</TableCell>
+                          <TableCell>
+                            <Chip
+                              label={row.attributes.rtnStatusCode}
+                              color={
+                                row.attributes.rtnStatusCode == "success"
+                                  ? "success"
+                                  : "error"
+                              }
+                            />
+                          </TableCell>
+                          <TableCell>
+                            {dateFormatter.format(row.attributes.rtnDate)}
+                          </TableCell>
+
+                          <TableCell>
+                            {row.attributes.rtnStatusCode != "success" ?? (
+                              <Button
+                                variant="contained"
+                                size="small"
+                                onClick={resubmit()}
+                              >
+                                Resubmit
                               </Button>
-                            </Link>
-
-                            <Button
-                              size="small"
-                              onClick={() => {
-                                handleClickSet(row);
-                              }}
-                            >
-                              <Tooltip title="Submit request" placement="right">
-                                <IosShareIcon />
-                              </Tooltip>
-                            </Button>
+                            )}
                           </TableCell>
                         </TableRow>
                       );
                     })}
                     {emptyRows > 0 && (
                       <TableRow>
-                        <TableCell colSpan={11} />
+                        <TableCell colSpan={12} />
                       </TableRow>
                     )}
                   </TableBody>
@@ -583,15 +480,6 @@ export default function ListingTable({ data }) {
             onPageChange={handleChangePage}
             onRowsPerPageChange={handleChangeRowsPerPage}
           />
-
-          {/* <Box display="flex" justifyContent="space-between" p={2}>
-          <Typography>Page: {page + 1}</Typography>
-          <Pagination
-            count={rows.meta.pageCount}
-            page={page}
-            onChange={handleChange}
-          />
-        </Box> */}
         </Paper>
       </Box>
     </Box>

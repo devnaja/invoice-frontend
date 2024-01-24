@@ -94,7 +94,7 @@ const PrivateLayout = ({ children }) => {
 
   const logout = () => {
     localStorage.removeItem("token");
-    localStorage.removeItem("me");
+    localStorage.removeItem("loggedInID");
     navigation("/signin");
   };
   return (
@@ -174,6 +174,14 @@ const PrivateLayout = ({ children }) => {
                   <GradingIcon />
                 </ListItemIcon>
                 <ListItemText primary="Account Payable" />
+              </ListItemButton>
+              <ListItemButton component={Link} to="/request-history">
+                <ListItemIcon
+                  sx={{ color: (theme) => theme.palette.primary.contrastText }}
+                >
+                  <GradingIcon />
+                </ListItemIcon>
+                <ListItemText primary="Request History" />
               </ListItemButton>
               <ListItemButton component={Link} to="/setting">
                 <ListItemIcon

@@ -1,12 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import Listing from "./listing";
-import { Box } from "@mui/material";
 import PrivateLayout from "layouts/privateLayout";
 import ListingTable from "./listing";
-import BasicBreadcrumbs from "components/breadcrumb";
-import SearchField from "components/searchField";
-import ImportButton from "./importBtn";
 import DateFormatter from "helper/dateFormartter";
 
 function Receivable() {
@@ -17,7 +12,7 @@ function Receivable() {
   const fetchDataAndUpdateList = async () => {
     try {
       const response = await axios.get(
-        "/transactions?filters[tranType][$eq]=AR",
+        "/transactions?populate=company&filters[tranType][$eq]=AR",
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -27,6 +22,7 @@ function Receivable() {
       );
 
       const data = response.data.data;
+      console.log("data", data);
 
       data.forEach((item) => {
         const key = `${item.attributes.eInvNum}`;
@@ -55,7 +51,7 @@ function Receivable() {
             supSst: item.attributes.supSst,
             supTourismTax: item.attributes.supTourismTax,
             supMsic: item.attributes.supMsic,
-            buyID: item.attributes.buyID,
+            buyID: item.attributes.buyId,
             buyerName: item.attributes.buyerName,
             buyEmail: item.attributes.buyEmail,
             buyPhone: item.attributes.buyPhone,
@@ -65,6 +61,7 @@ function Receivable() {
             updatedAt: item.attributes.updatedAt,
             publishedAt: item.attributes.publishedAt,
             products: [],
+            company: item.attributes.company,
           });
         }
         groupedByInvoiceAndCompany.get(key).products.push({
@@ -107,18 +104,6 @@ function Receivable() {
 
   return (
     <PrivateLayout>
-      {/* <Listing /> */}
-      <BasicBreadcrumbs />
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "space-between",
-        }}
-      >
-        <SearchField />
-        <ImportButton />
-      </Box>
-
       <ListingTable data={receivableTransactions} />
     </PrivateLayout>
   );

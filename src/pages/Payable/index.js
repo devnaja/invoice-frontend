@@ -1,23 +1,19 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import Listing from "./listing";
-import { Box } from "@mui/material";
 import PrivateLayout from "layouts/privateLayout";
 import ListingTable from "./listing";
-import BasicBreadcrumbs from "components/breadcrumb";
-import SearchField from "components/searchField";
-import ImportButton from "./importBtn";
 import DateFormatter from "helper/dateFormartter";
 
 function Payable() {
   const [payableTransactions, setPayableTransactions] = useState([]);
   const dateFormatter = DateFormatter();
   // creating a new instance of the object
+  let tempCompanyData;
   const groupedByInvoiceAndCompany = new Map();
   const fetchDataAndUpdateList = async () => {
     try {
       const response = await axios.get(
-        "/transactions?filters[tranType][$eq]=AP",
+        "/transactions?populate=company&filters[tranType][$eq]=AP",
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -29,6 +25,7 @@ function Payable() {
       const data = response.data.data;
 
       data.forEach((item) => {
+        tempCompanyData = item.attributes.company.data;
         const key = `${item.attributes.eInvNum}`;
         // check the object has a specified key or not.
         if (!groupedByInvoiceAndCompany.has(key)) {
@@ -65,6 +62,7 @@ function Payable() {
             updatedAt: item.attributes.updatedAt,
             publishedAt: item.attributes.publishedAt,
             products: [],
+            company: item.attributes.company,
           });
         }
         groupedByInvoiceAndCompany.get(key).products.push({
@@ -95,7 +93,7 @@ function Payable() {
       // Convert the map back to an array of grouped objects
       const groupedInvoicesArray = [...groupedByInvoiceAndCompany.values()];
 
-      console.log(groupedInvoicesArray);
+      console.log("groupedInvoicesArray", groupedInvoicesArray);
 
       setPayableTransactions(groupedInvoicesArray);
     } catch (error) {
@@ -109,18 +107,6 @@ function Payable() {
 
   return (
     <PrivateLayout>
-      {/* <Listing /> */}
-      <BasicBreadcrumbs />
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "space-between",
-        }}
-      >
-        <SearchField />
-        <ImportButton />
-      </Box>
-
       <ListingTable data={payableTransactions} />
     </PrivateLayout>
   );

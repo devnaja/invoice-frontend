@@ -11,6 +11,11 @@ import {
   Box,
   Typography,
   Container,
+  FormControl,
+  InputLabel,
+  OutlinedInput,
+  InputAdornment,
+  IconButton,
 } from "@mui/material";
 import axios from "axios";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
@@ -20,6 +25,10 @@ import Swal from "sweetalert2";
 import PublicLayout from "layouts/publicLayout";
 import { auth } from "api/Auth/login";
 import Copyright from "components/copyright";
+import { toast } from "react-toastify";
+
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
 
 const defaultTheme = createTheme();
 
@@ -27,6 +36,13 @@ export default function Signin() {
   const navigate = useNavigate();
   const [data, setData] = useState({});
   const [loggedIn, setLoggedIn] = useState(false);
+  const [showPassword, setShowPassword] = React.useState(false);
+
+  const handleClickShowPassword = () => setShowPassword((show) => !show);
+
+  const handleMouseDownPassword = (event) => {
+    event.preventDefault();
+  };
 
   const handleAccount = (property, event) => {
     const dataCopy = { ...data };
@@ -42,7 +58,16 @@ export default function Signin() {
       return result;
     } catch (error) {
       // Handle the error if needed
-      console.error("Authentication failed!", error);
+      // let errorList = error.response.data.error.details.errors;
+      // console.error("An error occurred:", errorList);
+      // if (errorList.length > 0) {
+      //   for (const list of errorList) {
+      //     toast.error(list.message + " " + list.path[0], {
+      //       position: "top-right",
+      //       autoClose: 3000,
+      //     });
+      //   }
+      // }
     }
   };
 
@@ -59,7 +84,7 @@ export default function Signin() {
           <CssBaseline />
           <Box
             sx={{
-              marginTop: 8,
+              marginTop: 10,
               display: "flex",
               flexDirection: "column",
               alignItems: "center",
@@ -80,7 +105,7 @@ export default function Signin() {
                 name="id"
                 autoFocus
               />
-              <TextField
+              {/* <TextField
                 onChange={(event) => handleAccount("password", event)}
                 margin="normal"
                 required
@@ -90,8 +115,33 @@ export default function Signin() {
                 type="password"
                 id="password"
                 autoComplete="current-password"
-              />
-              <FormControlLabel
+              /> */}
+
+              <FormControl fullWidth variant="outlined">
+                <InputLabel htmlFor="outlined-adornment-password">
+                  Password
+                </InputLabel>
+                <OutlinedInput
+                  id="outlined-adornment-password"
+                  type={showPassword ? "text" : "password"}
+                  onChange={(event) => handleAccount("password", event)}
+                  endAdornment={
+                    <InputAdornment position="end">
+                      <IconButton
+                        aria-label="toggle password visibility"
+                        onClick={handleClickShowPassword}
+                        onMouseDown={handleMouseDownPassword}
+                        edge="end"
+                      >
+                        {!showPassword ? <VisibilityOff /> : <Visibility />}
+                      </IconButton>
+                    </InputAdornment>
+                  }
+                  label="Password"
+                />
+              </FormControl>
+
+              {/* <FormControlLabel
                 control={<Checkbox value="remember" color="primary" />}
                 label="Remember me"
                 sx={{
@@ -99,7 +149,7 @@ export default function Signin() {
                   justifyContent: "center",
                   alignItems: "center",
                 }}
-              />
+              /> */}
 
               <Button
                 type="submit"
@@ -107,6 +157,7 @@ export default function Signin() {
                 variant="contained"
                 color="primary"
                 onClick={handleSubmit}
+                sx={{ mt: 2 }}
               >
                 Sign In
               </Button>

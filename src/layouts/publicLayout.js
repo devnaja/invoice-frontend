@@ -15,7 +15,16 @@ const PublicLayout = ({ children }) => {
           backgroundColor: "#184478",
         }}
       />
-      <Grid item xs={12} sm={8} md={6} component={Paper} elevation={6} square>
+      <Grid
+        item
+        xs={12}
+        sm={8}
+        md={6}
+        component={Paper}
+        elevation={6}
+        square
+        sx={{ height: "100vh", alignContent: "center" }}
+      >
         {children}
       </Grid>
     </Grid>
