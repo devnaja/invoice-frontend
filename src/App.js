@@ -1,24 +1,46 @@
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+
+import Homepage from "./pages/Homepage/index";
+import Signup from "./pages/Auth/signup";
+import Signin from "./pages/Auth/signin";
+import ReceivableList from "./pages/Receivable/index";
+import PayableList from "./pages/Payable/index";
+import Setting from "./pages/Setting/index";
+import DetailsInfo from "pages/Receivable/details";
+import DetailsInfoPayable from "pages/Payable/details";
+import ForgotPassword from "pages/Auth/forgotPassword";
+import { ToastContainer } from "react-toastify";
+import PrivateRoutes from "./utils/privateRoutes";
+import History from "pages/History";
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <React.Fragment>
+      <Router>
+        <Routes>
+          <Route path="/signup" element={<Signup />} />
+          <Route path="/signin" element={<Signin />} />
+          <Route path="/forgotPassword" element={<ForgotPassword />} />
+
+          <Route element={<PrivateRoutes />}>
+            <Route path="/" element={<Homepage />} />
+
+            <Route path="/account-receivable" element={<ReceivableList />} />
+            <Route path="/account-receivable/:id" element={<DetailsInfo />} />
+            <Route path="/account-payable" element={<PayableList />} />
+            <Route
+              path="/account-payable/:id"
+              element={<DetailsInfoPayable />}
+            />
+            <Route path="/request-history" element={<History />} />
+            {/* <Route path="/account-payable" element={<Payable />} /> */}
+            <Route path="/setting" element={<Setting />} />
+          </Route>
+        </Routes>
+      </Router>
+      <ToastContainer />
+    </React.Fragment>
   );
 }
 
