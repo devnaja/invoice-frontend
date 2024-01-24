@@ -245,8 +245,8 @@ export default function ListingTable({ data }) {
   const navigate = useNavigate();
   const dateFormatter = DateFormatter();
   rows = data;
-  // let visibleRows = data;
-  const [visibleRows, setVisibleRows] = React.useState(data);
+  let visibleRows = data;
+  // const [visibleRows, setVisibleRows] = React.useState(data);
   const [order, setOrder] = React.useState("desc");
   const [orderBy, setOrderBy] = React.useState("id");
   const [selected, setSelected] = React.useState([]);
@@ -426,19 +426,19 @@ export default function ListingTable({ data }) {
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
 
-  // visibleRows = React.useMemo(
-  //   () =>
-  //     stableSort(rows, getComparator(order, orderBy)).slice(
-  //       page * rowsPerPage,
-  //       page * rowsPerPage + rowsPerPage
-  //     ),
-  //   [order, orderBy, page, rowsPerPage]
-  // );
+  visibleRows = React.useMemo(
+    () =>
+      stableSort(rows, getComparator(order, orderBy)).slice(
+        page * rowsPerPage,
+        page * rowsPerPage + rowsPerPage
+      ),
+    [order, orderBy, page, rowsPerPage]
+  );
 
-  // const handleChange = (event, value) => {
-  //   console.log("event", event);
-  //   setPage(value);
-  // };
+  const handleChange = (event, value) => {
+    console.log("event", event);
+    setPage(value);
+  };
 
   // Function to render skeleton rows
   const renderSkeletonRows = (count) => {
