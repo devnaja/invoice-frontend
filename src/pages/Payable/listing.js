@@ -467,7 +467,7 @@ export default function ListingTable({ data }) {
                           <TableCell display="flex">
                             <Box></Box>
                             <Link
-                              to={`/account-receivable/${row.id}`}
+                              to={`/account-payable/${row.id}`}
                               state={{ dataRows: { row } }}
                             >
                               <Button size="small">
