@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
 import { alpha } from "@mui/material/styles";
@@ -16,21 +16,22 @@ import {
   Paper,
   Checkbox,
   Toolbar,
-  IconButton,
-  Tooltip,
-  Skeleton,
-  Button,
 } from "@mui/material";
 import axios from "axios";
+import IconButton from "@mui/material/IconButton";
+import Tooltip from "@mui/material/Tooltip";
 import DeleteIcon from "@mui/icons-material/Delete";
 import FilterListIcon from "@mui/icons-material/FilterList";
 import { visuallyHidden } from "@mui/utils";
-import { Link } from "react-router-dom";
+import { Skeleton, Button } from "@mui/material";
+import { Link, Navigate } from "react-router-dom";
 import DateFormatter from "helper/dateFormartter";
 import { toast } from "react-toastify";
 import moment from "moment";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import IosShareIcon from "@mui/icons-material/IosShare";
+
+// let rows;
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -80,16 +81,16 @@ const headCells = [
     label: "Invoice Number",
   },
   {
-    id: "supplierName",
+    id: "buyerName",
     numeric: false,
     disablePadding: true,
-    label: "Supplier Name",
+    label: "Buyer Name",
   },
   {
-    id: "supEmail",
+    id: "buyEmail",
     numeric: false,
     disablePadding: true,
-    label: "Supplier Email",
+    label: "Buyer Email",
   },
   {
     id: "eInvType",
@@ -109,6 +110,7 @@ const headCells = [
     disablePadding: false,
     label: "Submitted At",
   },
+
   {
     numeric: false,
     disablePadding: false,
@@ -238,31 +240,25 @@ EnhancedTableToolbar.propTypes = {
 export default function ListingTable({ data }) {
   const navigate = useNavigate();
   const dateFormatter = DateFormatter();
-  const [order, setOrder] = useState("desc");
-  const [orderBy, setOrderBy] = useState("id");
-  const [selected, setSelected] = useState([]);
-  const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(3);
+  let rows = data;
+  let visibleRows = data;
+
+  console.log("row", rows);
+  console.log("visibleRows", visibleRows);
+  // const [visibleRows, setVisibleRows] = React.useState(data);
+  const [order, setOrder] = React.useState("desc");
+  const [orderBy, setOrderBy] = React.useState("id");
+  const [selected, setSelected] = React.useState([]);
+  const [page, setPage] = React.useState(0);
+  const [rowsPerPage, setRowsPerPage] = React.useState(3);
 
   let todayDate = new Date();
-  const [visibleRows, setVisibleRows] = useState([]);
-
-  useEffect(() => {
-    // Update visibleRows when the data prop changes
-    setVisibleRows(data);
-    setVisibleRows(
-      stableSort(data, getComparator(order, orderBy)).slice(
-        page * rowsPerPage,
-        page * rowsPerPage + rowsPerPage
-      )
-    );
-  }, [data, order, orderBy, page, rowsPerPage]);
-  let rows = data;
 
   // Format the Date object as needed
   let requestDate = moment(todayDate)
     .utc()
     .format("YYYY-MM-DDTHH:mm:ss.SSS[Z]");
+  // const [valueofRow, setValueOfRow] = React.useState();
 
   let rtnDate = moment()
     .add(1, "days")
@@ -296,11 +292,10 @@ export default function ListingTable({ data }) {
         ],
       },
     };
-
     try {
       const response = await axios.post(
         "/request-histories",
-        { data: reqtBody },
+        { data: reqtBody }, // Send each object as payload
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -308,8 +303,30 @@ export default function ListingTable({ data }) {
           },
         }
       );
+      let res = response.data.data;
+      // console.log("res", res);
 
       navigate("/request-history");
+
+      // if(res.status) {
+      //   let rtnBody = {
+      //     transID: value.id,
+      //     reqDate: formattedDateString,
+      //     reqHeader: value.eInvType,
+      //     reqBody: body,
+      //     reqParam: "",
+      //     reqUrl: `/request-history/${value.id}`,
+      //   };
+      // const response = await axios.put(
+      //   "/request-histories",
+      //   { data: rtnBody }, // Send each object as payload
+      //   {
+      //     headers: {
+      //       Authorization: `Bearer ${localStorage.getItem("token")}`,
+      //       Accept: "application/json",
+      //     },
+      //   }
+      // );
 
       toast.success("Request has been submitted.", {
         position: "top-right",
@@ -327,14 +344,43 @@ export default function ListingTable({ data }) {
     }
   };
 
+  const submitRequest = () => {
+    // const a = event;
+    // console.log("event", event);
+    // try {
+    //   const response = await axios.post(
+    //     "/request-history",
+    //     { data: dataItem }, // Send each object as payload
+    //     {
+    //       headers: {
+    //         Authorization: `Bearer ${localStorage.getItem("token")}`,
+    //         Accept: "application/json",
+    //       },
+    //     }
+    //   );
+    //   const res = response.data.data;
+    //   toast.success("List payable transactions created successfully.", {
+    //     position: "top-right",
+    //     autoClose: 3000,
+    //   });
+    //   setOpen(false);
+    // } catch (error) {
+    //   let errorList = error.response.data.error.details.errors;
+    //   console.error("An error occurred:", errorList);
+    //   for (const list of errorList) {
+    //     toast.error(list.message + " " + list.path[0], {
+    //       position: "top-right",
+    //       autoClose: 3000,
+    //     });
+    //   }
+    // }
+  };
+
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === "asc";
     setOrder(isAsc ? "desc" : "asc");
     setOrderBy(property);
   };
-
-  const emptyRows =
-    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
@@ -375,18 +421,23 @@ export default function ListingTable({ data }) {
 
   const isSelected = (id) => selected.indexOf(id) !== -1;
 
+  // Avoid a layout jump when reaching the last page with empty rows.
+  const emptyRows =
+    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
+
+  visibleRows = React.useMemo(
+    () =>
+      stableSort(rows, getComparator(order, orderBy)).slice(
+        page * rowsPerPage,
+        page * rowsPerPage + rowsPerPage
+      ),
+    [order, orderBy, page, rowsPerPage]
+  );
+
   const handleChange = (event, value) => {
+    console.log("event", event);
     setPage(value);
   };
-
-  // const visibleRows = useMemo(
-  //   () =>
-  //     stableSort(rows, getComparator(order, orderBy)).slice(
-  //       page * rowsPerPage,
-  //       page * rowsPerPage + rowsPerPage
-  //     ),
-  //   [order, orderBy, page, rowsPerPage]
-  // );
 
   // Function to render skeleton rows
   const renderSkeletonRows = (count) => {
@@ -455,8 +506,8 @@ export default function ListingTable({ data }) {
                             {row.company?.data?.attributes?.name || "-"}
                           </TableCell>
                           <TableCell>{row.eInvNum}</TableCell>
-                          <TableCell>{row.supplierName}</TableCell>
-                          <TableCell>{row.supEmail}</TableCell>
+                          <TableCell>{row.buyerName}</TableCell>
+                          <TableCell>{row.buyEmail}</TableCell>
 
                           <TableCell>{row.eInvType}</TableCell>
                           <TableCell>{row.status}</TableCell>
@@ -513,6 +564,15 @@ export default function ListingTable({ data }) {
             onPageChange={handleChangePage}
             onRowsPerPageChange={handleChangeRowsPerPage}
           />
+
+          {/* <Box display="flex" justifyContent="space-between" p={2}>
+          <Typography>Page: {page + 1}</Typography>
+          <Pagination
+            count={rows.meta.pageCount}
+            page={page}
+            onChange={handleChange}
+          />
+        </Box> */}
         </Paper>
       </Box>
     </Box>

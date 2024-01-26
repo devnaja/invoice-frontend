@@ -32,9 +32,16 @@ function CustomTabPanel(props) {
   );
 }
 
-export default function TabListing() {
+function a11yProps(index) {
+  return {
+    id: `simple-tab-${index}`,
+    "aria-controls": `simple-tabpanel-${index}`,
+  };
+}
+
+export default function TabListing({ getData, data }) {
   const status = [
-    { name: "" },
+    { name: "all" },
     { name: "failed" },
     { name: "rejected" },
     { name: "dispute" },
@@ -42,35 +49,24 @@ export default function TabListing() {
   const [value, setValue] = React.useState(0);
   const [dataList, setDataList] = React.useState([]);
   const dateFormatter = DateFormatter();
+  // creating a new instance of the object
   const groupedByInvoiceAndCompany = new Map();
 
-  const fetchDataAndUpdateList = async (i) => {
+  const fetchDataAndUpdateList = async () => {
     try {
-      let filter = "";
-
-      switch (i) {
-        case 0:
-          filter = `filters[tranType][$eq]=AR`;
-          break;
-        case 1:
-          filter = `filters[tranType][$eq]=AR&filters[status][$eq]=${status[i].name}`;
-          break;
-        case 2:
-          filter = `filters[tranType][$eq]=AR&filters[status][$eq]=${status[i].name}`;
-          break;
-        case 3:
-          filter = `filters[tranType][$eq]=AR&filters[status][$eq]=${status[i].name}`;
-          break;
-      }
-
-      const response = await axios.get(`/transactions?` + filter, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-          Accept: "application/json",
-        },
-      });
+      const response = await axios.get(
+        "/transactions?populate=company&filters[tranType][$eq]=AR",
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+            Accept: "application/json",
+          },
+        }
+      );
 
       const data = response.data.data;
+      // console.log("data", data);
+      console.log("masuk");
 
       data.forEach((item) => {
         const key = `${item.attributes.eInvNum}`;
@@ -107,7 +103,6 @@ export default function TabListing() {
             createdAt: item.attributes.createdAt,
             updatedAt: item.attributes.updatedAt,
             publishedAt: item.attributes.publishedAt,
-            status: item.attributes.status,
             products: [],
             company: item.attributes.company,
           });
@@ -137,6 +132,7 @@ export default function TabListing() {
         });
       });
 
+      // Convert the map back to an array of grouped objects
       const groupedInvoicesArray = [...groupedByInvoiceAndCompany.values()];
 
       setDataList(groupedInvoicesArray);
@@ -146,16 +142,11 @@ export default function TabListing() {
   };
 
   useEffect(() => {
-    const fetchData = async () => {
-      await fetchDataAndUpdateList(value);
-    };
-
-    fetchData();
-  }, [value]);
+    fetchDataAndUpdateList();
+  }, []);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
-    fetchDataAndUpdateList(newValue);
   };
 
   const Root = styled("div")(({ theme }) => ({
