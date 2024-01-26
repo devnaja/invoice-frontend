@@ -61,12 +61,12 @@ function stableSort(array, comparator) {
 }
 
 const headCells = [
-  {
-    id: "id",
-    numeric: false,
-    disablePadding: true,
-    label: "ID",
-  },
+  // {
+  //   id: "id",
+  //   numeric: false,
+  //   disablePadding: true,
+  //   label: "ID",
+  // },
   {
     id: "name",
     numeric: false,
@@ -449,7 +449,7 @@ export default function ListingTable({ data }) {
                               }}
                             />
                           </TableCell>
-                          <TableCell>{row.id}</TableCell>
+                          {/* <TableCell>{row.id}</TableCell> */}
 
                           <TableCell>
                             {row.company?.data?.attributes?.name || "-"}

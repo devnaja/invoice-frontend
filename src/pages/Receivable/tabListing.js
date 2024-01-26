@@ -50,16 +50,16 @@ export default function TabListing() {
 
       switch (i) {
         case 0:
-          filter = `filters[tranType][$eq]=AR`;
+          filter = `populate=company&filters[tranType][$eq]=AR`;
           break;
         case 1:
-          filter = `filters[tranType][$eq]=AR&filters[status][$eq]=${status[i].name}`;
+          filter = `populate=company&filters[tranType][$eq]=AR&filters[status][$eq]=${status[i].name}`;
           break;
         case 2:
-          filter = `filters[tranType][$eq]=AR&filters[status][$eq]=${status[i].name}`;
+          filter = `populate=company&filters[tranType][$eq]=AR&filters[status][$eq]=${status[i].name}`;
           break;
         case 3:
-          filter = `filters[tranType][$eq]=AR&filters[status][$eq]=${status[i].name}`;
+          filter = `populate=company&filters[tranType][$eq]=AR&filters[status][$eq]=${status[i].name}`;
           break;
       }
 
