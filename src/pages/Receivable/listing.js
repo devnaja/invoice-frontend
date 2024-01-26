@@ -480,16 +480,21 @@ export default function ListingTable({ data }) {
                               </Button>
                             </Link>
 
-                            <Button
-                              size="small"
-                              onClick={() => {
-                                handleClickSet(row);
-                              }}
-                            >
-                              <Tooltip title="Submit request" placement="right">
-                                <IosShareIcon />
-                              </Tooltip>
-                            </Button>
+                            {row.status === "pending" && (
+                              <Button
+                                size="small"
+                                onClick={() => {
+                                  handleClickSet(row);
+                                }}
+                              >
+                                <Tooltip
+                                  title="Submit request"
+                                  placement="right"
+                                >
+                                  <IosShareIcon />
+                                </Tooltip>
+                              </Button>
+                            )}
                           </TableCell>
                         </TableRow>
                       );
