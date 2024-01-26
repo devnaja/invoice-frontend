@@ -11,7 +11,7 @@ import {
 import PrivateLayout from "layouts/privateLayout";
 import { useLocation } from "react-router-dom";
 import DateFormatter from "helper/dateFormartter";
-import TableList from "./tableList";
+import ProductTable from "./productTable";
 import BasicBreadcrumbs from "components/breadcrumb";
 
 const DetailItem = ({ label, value }) => (
@@ -87,7 +87,6 @@ const DetailsInfoPayable = () => {
     });
   };
 
-  console.log("11", data.buyerInfo);
   useEffect(() => {
     const { dataRows } = location.state;
     structredList(dataRows);
@@ -254,7 +253,13 @@ const DetailsInfoPayable = () => {
             <Chip label="Products Details" />
           </Divider>
         </Typography>
-        <TableList rows={data.productInfo} />
+        <ProductTable rows={data.productInfo} />
+
+        <Typography fontWeight="fontWeightMedium" variant="h6" mt={4} mb={2}>
+          <Divider textAlign="center">
+            <Chip label="Request Details" />
+          </Divider>
+        </Typography>
       </Paper>
     </PrivateLayout>
   );

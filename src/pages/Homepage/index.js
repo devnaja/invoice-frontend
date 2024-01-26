@@ -139,7 +139,7 @@ export default function Homepage() {
       </Grid>
 
       <Typography mt={5} mb={2} sx={{ fontSize: "26px", fontWeight: "bold" }}>
-        Total Amount Statisics
+        Total Amount Statistics
       </Typography>
       <Grid container spacing={5}>
         {/* Chart */}

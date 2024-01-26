@@ -11,7 +11,7 @@ import Typography from "@mui/material/Typography";
 import Paper from "@mui/material/Paper";
 import DateFormatter from "helper/dateFormartter";
 
-export default function TableList(props) {
+export default function ProductTable(props) {
   const rows = props.rows;
   const dateFormatter = DateFormatter();
 
@@ -52,38 +52,53 @@ export default function TableList(props) {
             <TableCell>Total Include Tax</TableCell>
           </TableRow>
         </TableHead>
-        <TableBody>
-          {rows.map((row, i) => (
-            <TableRow
-              key={i}
-              sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-            >
-              <TableCell component="th" scope="row">
-                {row.billRefNum}
-              </TableCell>
-              <TableCell>{row.class}</TableCell>
-              <TableCell>{row.desc}</TableCell>
-              <TableCell>{row.discAmt}</TableCell>
-              <TableCell>{row.discRate}</TableCell>
-              <TableCell>{row.measure}</TableCell>
-              <TableCell>{row.unitPrice}</TableCell>
-              <TableCell>{row.payAmt}</TableCell>
-              <TableCell>{dateFormatter.format(row.payDate)}</TableCell>
-              <TableCell>{row.payMode}</TableCell>
-              <TableCell>{row.payRefNum}</TableCell>
-              <TableCell>{row.payTerm}</TableCell>
-              <TableCell>{row.quantity}</TableCell>
-              <TableCell>{row.subtotal}</TableCell>
-              <TableCell>{row.taxAmt}</TableCell>
-              <TableCell>{row.taxRate}</TableCell>
-              <TableCell>{row.taxType}</TableCell>
-              <TableCell>{row.taxExemptAmt}</TableCell>
-              <TableCell>{row.taxExemptDesc}</TableCell>
-              <TableCell>{row.totalExclTax}</TableCell>
-              <TableCell>{row.totalInclTax}</TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
+        {rows.length === 0 ? (
+          <TableRow>
+            <TableCell colSpan={12}>
+              <Typography textAlign="center" color="lightgray">
+                No Data Available
+              </Typography>
+            </TableCell>
+          </TableRow>
+        ) : (
+          <TableBody>
+            {rows.map((row, i) => (
+              <TableRow
+                key={i}
+                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+              >
+                <TableCell component="th" scope="row">
+                  {row.billRefNum}
+                </TableCell>
+                <TableCell>{row.class}</TableCell>
+                <TableCell>{row.desc}</TableCell>
+                <TableCell>{row.discAmt}</TableCell>
+                <TableCell>{row.discRate}</TableCell>
+                <TableCell>{row.measure}</TableCell>
+                <TableCell>{row.unitPrice}</TableCell>
+                <TableCell>{row.payAmt}</TableCell>
+                <TableCell>{dateFormatter.format(row.payDate)}</TableCell>
+                <TableCell>{row.payMode}</TableCell>
+                <TableCell>{row.payRefNum}</TableCell>
+                <TableCell>{row.payTerm}</TableCell>
+                <TableCell>{row.quantity}</TableCell>
+                <TableCell>{row.subtotal}</TableCell>
+                <TableCell>{row.taxAmt}</TableCell>
+                <TableCell>{row.taxRate}</TableCell>
+                <TableCell>{row.taxType}</TableCell>
+                <TableCell>{row.taxExemptAmt}</TableCell>
+                <TableCell>{row.taxExemptDesc}</TableCell>
+                <TableCell>{row.totalExclTax}</TableCell>
+                <TableCell>{row.totalInclTax}</TableCell>
+              </TableRow>
+            ))}
+            {/* {emptyRows > 0 && (
+              <TableRow>
+                <TableCell colSpan={11} />
+              </TableRow>
+            )} */}
+          </TableBody>
+        )}
       </Table>
     </TableContainer>
   );

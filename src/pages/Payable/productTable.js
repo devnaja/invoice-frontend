@@ -11,7 +11,7 @@ import Typography from "@mui/material/Typography";
 import Paper from "@mui/material/Paper";
 import DateFormatter from "helper/dateFormartter";
 
-export default function TableList(props) {
+export default function ProductTable(props) {
   const rows = props.rows;
   const dateFormatter = DateFormatter();
 
@@ -29,7 +29,7 @@ export default function TableList(props) {
       <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
         <TableHead>
           <TableRow>
-            <TableCell>Ref. Number</TableCell>
+            <TableCell sx={{ width: 10 }}>Ref. Number</TableCell>
             <TableCell>Classification</TableCell>
             <TableCell>Descriptions</TableCell>
             <TableCell>Discount Amount&nbsp;(RM)</TableCell>

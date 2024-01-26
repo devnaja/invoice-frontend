@@ -79,7 +79,7 @@ const headCells = [
     id: "reqHeader",
     numeric: false,
     disablePadding: true,
-    label: "Reaquest Header",
+    label: "Request Header",
   },
   {
     id: "reqBody",

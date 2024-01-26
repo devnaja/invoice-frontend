@@ -61,12 +61,12 @@ function stableSort(array, comparator) {
 }
 
 const headCells = [
-  {
-    id: "id",
-    numeric: false,
-    disablePadding: true,
-    label: "ID",
-  },
+  // {
+  //   id: "id",
+  //   numeric: false,
+  //   disablePadding: true,
+  //   label: "ID",
+  // },
   {
     id: "name",
     numeric: false,
@@ -449,7 +449,7 @@ export default function ListingTable({ data }) {
                               }}
                             />
                           </TableCell>
-                          <TableCell>{row.id}</TableCell>
+                          {/* <TableCell>{row.id}</TableCell> */}
 
                           <TableCell>
                             {row.company?.data?.attributes?.name || "-"}
@@ -467,7 +467,7 @@ export default function ListingTable({ data }) {
                           <TableCell display="flex">
                             <Box></Box>
                             <Link
-                              to={`/account-receivable/${row.id}`}
+                              to={`/account-payable/${row.id}`}
                               state={{ dataRows: { row } }}
                             >
                               <Button size="small">
@@ -480,16 +480,21 @@ export default function ListingTable({ data }) {
                               </Button>
                             </Link>
 
-                            <Button
-                              size="small"
-                              onClick={() => {
-                                handleClickSet(row);
-                              }}
-                            >
-                              <Tooltip title="Submit request" placement="right">
-                                <IosShareIcon />
-                              </Tooltip>
-                            </Button>
+                            {row.status === "pending" && (
+                              <Button
+                                size="small"
+                                onClick={() => {
+                                  handleClickSet(row);
+                                }}
+                              >
+                                <Tooltip
+                                  title="Submit request"
+                                  placement="right"
+                                >
+                                  <IosShareIcon />
+                                </Tooltip>
+                              </Button>
+                            )}
                           </TableCell>
                         </TableRow>
                       );

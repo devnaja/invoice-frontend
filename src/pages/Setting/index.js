@@ -10,17 +10,17 @@ function Setting() {
     <PrivateLayout>
       <Grid container spacing={3}>
         <Grid item xs={12}>
-          <div style={{ width: "50%" }}>
+          <div>
             <SettingForm />
           </div>
         </Grid>
-        <Grid item xs={12}>
-          <div style={{ width: "50%" }}>
+        <Grid item xs={12} md={6}>
+          <div>
             <AllowImport />
           </div>
         </Grid>
-        <Grid item xs={12}>
-          <div style={{ width: "50%" }}>
+        <Grid item xs={12} md={6}>
+          <div>
             <AllowReject />
           </div>
         </Grid>

@@ -226,6 +226,7 @@ function ImportButton() {
           }
 
           obj[sHeader] = currentLine[j] == "" ? null : currentLine[j].trim();
+          obj["status"] = "pending";
         }
         result.push(obj);
       } else {
@@ -236,12 +237,10 @@ function ImportButton() {
         );
       }
     }
-
     return result;
   };
 
   const handleOnChange = (e) => {
-    console.log(e.target.files[0]);
     if (e.target.files[0]) {
       toast.success("Your csv files successfully uploaded", {
         position: "top-right",

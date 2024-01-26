@@ -11,7 +11,7 @@ import {
 import PrivateLayout from "layouts/privateLayout";
 import { useLocation, useParams } from "react-router-dom";
 import DateFormatter from "helper/dateFormartter";
-import TableList from "./tableList";
+import ProductTable from "./productTable";
 import BasicBreadcrumbs from "components/breadcrumb";
 
 const DetailItem = ({ label, value }) => (
@@ -254,7 +254,7 @@ const DetailsInfoPayable = () => {
             <Chip label="Products Details" />
           </Divider>
         </Typography>
-        <TableList rows={data.productInfo} />
+        <ProductTable rows={data.productInfo} />
       </Paper>
     </PrivateLayout>
   );
