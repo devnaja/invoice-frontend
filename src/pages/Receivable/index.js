@@ -3,6 +3,7 @@ import axios from "axios";
 import PrivateLayout from "layouts/privateLayout";
 import ListingTable from "./listing";
 import DateFormatter from "helper/dateFormartter";
+// import TabListing2 from "./tabListing";
 
 function Receivable() {
   const [receivableTransactions, setReceivableTransactions] = useState([]);
@@ -105,6 +106,7 @@ function Receivable() {
   return (
     <PrivateLayout>
       <ListingTable data={receivableTransactions} />
+      {/* <TabListing2 data={receivableTransactions} /> */}
     </PrivateLayout>
   );
 }
