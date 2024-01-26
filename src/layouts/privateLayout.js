@@ -175,14 +175,14 @@ const PrivateLayout = ({ children }) => {
                 </ListItemIcon>
                 <ListItemText primary="Account Payable" />
               </ListItemButton>
-              <ListItemButton component={Link} to="/request-history">
+              {/* <ListItemButton component={Link} to="/request-history">
                 <ListItemIcon
                   sx={{ color: (theme) => theme.palette.primary.contrastText }}
                 >
                   <GradingIcon />
                 </ListItemIcon>
                 <ListItemText primary="Request History" />
-              </ListItemButton>
+              </ListItemButton> */}
               <ListItemButton component={Link} to="/setting">
                 <ListItemIcon
                   sx={{ color: (theme) => theme.palette.primary.contrastText }}
