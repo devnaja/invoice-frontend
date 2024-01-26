@@ -2,7 +2,7 @@
   "homepage": "https://devnaja.github.io/invoice-frontend",
   "name": "invoice-frontend",
   "version": "0.1.0",
-  "private": true,
+  "private": false,
   "dependencies": {
     "@emailjs/browser": "^3.12.1",
     "@emotion/react": "^11.11.3",
