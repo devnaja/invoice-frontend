@@ -1,5 +1,4 @@
 import React, { useEffect } from "react";
-import PropTypes from "prop-types";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import { Typography, styled } from "@mui/material";
@@ -60,6 +59,9 @@ export default function TabListing() {
           break;
         case 3:
           filter = `populate=*&filters[tranType][$eq]=AR&filters[status][$eq]=${status[i].name}`;
+          break;
+        default:
+          filter = `populate=*&filters[tranType][$eq]=AR`;
           break;
       }
 

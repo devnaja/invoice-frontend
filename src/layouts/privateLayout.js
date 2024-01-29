@@ -151,7 +151,7 @@ const PrivateLayout = ({ children }) => {
             <Divider sx={{ my: 1 }} />
             {secondaryListItems} */}
 
-              <ListItemButton component={Link} to="/">
+              <ListItemButton component={Link} to="/invoice-frontend">
                 <ListItemIcon
                   sx={{ color: (theme) => theme.palette.primary.contrastText }}
                 >

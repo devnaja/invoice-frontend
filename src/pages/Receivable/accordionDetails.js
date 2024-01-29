@@ -1,13 +1,5 @@
 import React, { useState, useEffect } from "react";
-import {
-  Divider,
-  Grid,
-  Paper,
-  Typography,
-  Box,
-  CssBaseline,
-  Chip,
-} from "@mui/material";
+import { Grid, Typography, Box } from "@mui/material";
 import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
@@ -34,8 +26,6 @@ const DetailItem = ({ label, value }) => (
 export default function DetailsInfo() {
   const location = useLocation();
 
-  const labelWidth = 280;
-
   const [data, setData] = useState({
     invoiceInfo: {},
     supplierInfo: {},
@@ -46,7 +36,6 @@ export default function DetailsInfo() {
 
   const dateFormatter = DateFormatter();
   const structredList = async (data) => {
-    console.log("dataRows", data.row);
     const dataRows = data.row;
     const invoiceInfo = {
       id: dataRows.id,
@@ -99,7 +88,6 @@ export default function DetailsInfo() {
           reqBody: dataRows.request.attributes.reqBody,
           reqDate: dataRows.request.attributes.reqDate,
           reqParam: dataRows.request.attributes.reqParam,
-          reqUrl: dataRows.request.attributes.reqUrl,
           reqUrl: dataRows.request.attributes.reqUrl,
           rtnHeader: dataRows.request.attributes.rtnHeader,
           rtnBody: dataRows.request.attributes.rtnBody,

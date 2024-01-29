@@ -21,7 +21,7 @@ function App() {
         <Route path="/forgotPassword" element={<ForgotPassword />} />
 
         <Route element={<PrivateRoutes />}>
-          <Route path="/" element={<Homepage />} />
+          <Route path="/invoice-frontend" element={<Homepage />} />
 
           <Route path="/account-receivable" element={<ReceivableList />} />
           <Route path="/account-receivable/:id" element={<DetailsInfo />} />
