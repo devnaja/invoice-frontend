@@ -39,7 +39,7 @@ function a11yProps(index) {
   };
 }
 
-export default function TabListing({ getData, data }) {
+export default function TableListing({ getData, data }) {
   const status = [
     { name: "all" },
     { name: "failed" },

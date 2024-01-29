@@ -50,16 +50,16 @@ export default function TabListing() {
 
       switch (i) {
         case 0:
-          filter = `populate=company&filters[tranType][$eq]=AR`;
+          filter = `populate=*&filters[tranType][$eq]=AR`;
           break;
         case 1:
-          filter = `populate=company&filters[tranType][$eq]=AR&filters[status][$eq]=${status[i].name}`;
+          filter = `populate=*&filters[tranType][$eq]=AR&filters[status][$eq]=${status[i].name}`;
           break;
         case 2:
-          filter = `populate=company&filters[tranType][$eq]=AR&filters[status][$eq]=${status[i].name}`;
+          filter = `populate=*&filters[tranType][$eq]=AR&filters[status][$eq]=${status[i].name}`;
           break;
         case 3:
-          filter = `populate=company&filters[tranType][$eq]=AR&filters[status][$eq]=${status[i].name}`;
+          filter = `populate=*&filters[tranType][$eq]=AR&filters[status][$eq]=${status[i].name}`;
           break;
       }
 
@@ -108,6 +108,7 @@ export default function TabListing() {
             updatedAt: item.attributes.updatedAt,
             publishedAt: item.attributes.publishedAt,
             status: item.attributes.status,
+            request: item.attributes.request_history.data,
             products: [],
             company: item.attributes.company,
           });
@@ -140,6 +141,7 @@ export default function TabListing() {
       const groupedInvoicesArray = [...groupedByInvoiceAndCompany.values()];
 
       setDataList(groupedInvoicesArray);
+      // console.log("groupedInvoicesArray", groupedInvoicesArray);
     } catch (error) {
       console.error("An error occurred:", error.response);
     }

@@ -284,6 +284,7 @@ function ImportButton() {
       });
 
       setOpen(false);
+      // location.reload();
     } catch (error) {
       let errorList = error.response.data.error.details.errors;
       console.error("An error occurred:", errorList);
