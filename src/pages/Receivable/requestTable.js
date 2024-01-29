@@ -15,7 +15,7 @@ export default function RequestTable(props) {
   const rows = props.rows;
   const dateFormatter = DateFormatter();
 
-  console.log("rows", rows);
+  // console.log("rows", rows);
 
   return (
     <TableContainer
@@ -30,7 +30,7 @@ export default function RequestTable(props) {
         <TableHead>
           <TableRow>
             <TableCell>Transaction ID</TableCell>
-            <TableCell>Transaction Type</TableCell>
+            <TableCell>Invoice Number</TableCell>
             <TableCell>Request Header</TableCell>
             <TableCell>Request Body</TableCell>
             <TableCell>Request Params</TableCell>
@@ -58,12 +58,13 @@ export default function RequestTable(props) {
                 sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
               >
                 <TableCell component="th" scope="row">
-                  {row.tranID}
+                  {row.tranId}
                 </TableCell>
-                <TableCell>{row.tranType}</TableCell>
+                <TableCell>{row.invNum}</TableCell>
                 <TableCell>{row.reqHeader}</TableCell>
                 <TableCell>{row.reqBody}</TableCell>
                 <TableCell>{row.reqParams}</TableCell>
+                <TableCell>{row.reqUrl}</TableCell>
                 <TableCell>{row.reqDate}</TableCell>
                 <TableCell>{row.rtnHeader}</TableCell>
                 <TableCell>{row.rtnBody}</TableCell>

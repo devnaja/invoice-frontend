@@ -47,7 +47,6 @@ export default function DetailsInfo() {
 
   const dateFormatter = DateFormatter();
   const structredList = async (data) => {
-    console.log("dataRows", data.row);
     const dataRows = data.row;
     const invoiceInfo = {
       id: dataRows.id,
@@ -87,7 +86,26 @@ export default function DetailsInfo() {
     };
 
     const productInfo = dataRows.products;
-    const requestInfo = [];
+    const requestInfo = [
+      {
+        tranId: dataRows.id,
+        invNum: dataRows.eInvNum,
+        id: dataRows.request.id,
+        reqHeader: dataRows.request.attributes.reqHeader,
+        reqBody: dataRows.request.attributes.reqBody,
+        reqDate: dataRows.request.attributes.reqDate,
+        reqParam: dataRows.request.attributes.reqParam,
+        reqUrl: dataRows.request.attributes.reqUrl,
+        reqUrl: dataRows.request.attributes.reqUrl,
+        rtnHeader: dataRows.request.attributes.rtnHeader,
+        rtnBody: dataRows.request.attributes.rtnBody,
+        rtnStatusCode: dataRows.request.attributes.rtnStatusCode,
+        rtnDate: dataRows.request.attributes.rtnDate,
+        createdAt: dataRows.request.attributes.createdAt,
+        publishedAt: dataRows.request.attributes.publishedAt,
+        updatedAt: dataRows.request.attributes.updatedAt,
+      },
+    ];
 
     setData({
       invoiceInfo,

@@ -248,6 +248,7 @@ export default function ListingTable({ data }) {
   const [visibleRows, setVisibleRows] = useState([]);
 
   useEffect(() => {
+    console.log("data", data);
     // Update visibleRows when the data prop changes
     setVisibleRows(data);
     setVisibleRows(
@@ -398,6 +399,7 @@ export default function ListingTable({ data }) {
       </TableRow>
     ));
   };
+  console.log("visibleRows", visibleRows);
 
   return (
     <Box>

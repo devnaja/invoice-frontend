@@ -50,16 +50,16 @@ export default function TabListing() {
 
       switch (i) {
         case 0:
-          filter = `populate=company&filters[tranType][$eq]=AP`;
+          filter = `populate=*&filters[tranType][$eq]=AP`;
           break;
         case 1:
-          filter = `populate=company&filters[tranType][$eq]=AP&filters[status][$eq]=${status[i].name}`;
+          filter = `populate=*&filters[tranType][$eq]=AP&filters[status][$eq]=${status[i].name}`;
           break;
         case 2:
-          filter = `populate=company&filters[tranType][$eq]=AP&filters[status][$eq]=${status[i].name}`;
+          filter = `populate=*&filters[tranType][$eq]=AP&filters[status][$eq]=${status[i].name}`;
           break;
         case 3:
-          filter = `populate=company&filters[tranType][$eq]=AP&filters[status][$eq]=${status[i].name}`;
+          filter = `populate=*&filters[tranType][$eq]=AP&filters[status][$eq]=${status[i].name}`;
           break;
       }
 
@@ -73,6 +73,7 @@ export default function TabListing() {
       const data = response.data.data;
 
       data.forEach((item) => {
+        // console.log("item", item);
         const key = `${item.attributes.eInvNum}`;
         if (!groupedByInvoiceAndCompany.has(key)) {
           groupedByInvoiceAndCompany.set(key, {
@@ -108,6 +109,7 @@ export default function TabListing() {
             updatedAt: item.attributes.updatedAt,
             publishedAt: item.attributes.publishedAt,
             status: item.attributes.status,
+            request: item.attributes.request_history.data,
             products: [],
             company: item.attributes.company,
           });
@@ -138,6 +140,8 @@ export default function TabListing() {
       });
 
       const groupedInvoicesArray = [...groupedByInvoiceAndCompany.values()];
+
+      // console.log("groupedInvoicesArray", groupedInvoicesArray);
 
       setDataList(groupedInvoicesArray);
     } catch (error) {
