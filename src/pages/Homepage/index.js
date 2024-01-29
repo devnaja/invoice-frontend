@@ -1,18 +1,19 @@
 import React, { useEffect, useState } from "react";
-import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
 import Chart from "pages/Homepage/charts";
 import Deposits from "pages/Homepage/deposits";
-import Orders from "pages/Homepage/orders";
 import PrivateLayout from "layouts/privateLayout";
-import Barchart from "./barchat";
 import TransTypePie from "./pieChart";
-import invType from "./invTypeChart";
 import axios from "axios";
 import StatusView from "./statusView";
-import { blue, green, red, yellow } from "@mui/material/colors";
+import { blue, green, orange, red, yellow } from "@mui/material/colors";
 import { Typography } from "@mui/material";
+import CardListing from "./cardListing";
+import PendingActionsIcon from "@mui/icons-material/PendingActions";
+import SimCardAlertIcon from "@mui/icons-material/SimCardAlert";
+import WarningIcon from "@mui/icons-material/Warning";
+import RestorePageIcon from "@mui/icons-material/RestorePage";
 
 export default function Homepage() {
   const [supplierArray, setSupplierArray] = useState([]);
@@ -103,7 +104,12 @@ export default function Homepage() {
               flexDirection: "column",
             }}
           >
-            <StatusView title="Success" total={120} bgcolor={green[500]} />
+            <StatusView
+              title="Total Pending"
+              total={120}
+              icon={<PendingActionsIcon />}
+              bgColor={yellow[700]}
+            />
           </Paper>
         </Grid>
         <Grid item xs={12} md={4} lg={3}>
@@ -113,7 +119,12 @@ export default function Homepage() {
               flexDirection: "column",
             }}
           >
-            <StatusView title="Pending" total={12} bgcolor={yellow[600]} />
+            <StatusView
+              title="Total Failed"
+              total={120}
+              icon={<SimCardAlertIcon />}
+              bgColor={orange[800]}
+            />
           </Paper>
         </Grid>
         <Grid item xs={12} md={4} lg={3}>
@@ -123,7 +134,12 @@ export default function Homepage() {
               flexDirection: "column",
             }}
           >
-            <StatusView title="Submitted" total={230} bgcolor={blue[500]} />
+            <StatusView
+              title="Total Rejected"
+              total={120}
+              icon={<WarningIcon />}
+              bgColor={red[900]}
+            />
           </Paper>
         </Grid>
         <Grid item xs={12} md={4} lg={3}>
@@ -133,7 +149,12 @@ export default function Homepage() {
               flexDirection: "column",
             }}
           >
-            <StatusView title="Rejected" total={5} bgcolor={red[500]} />
+            <StatusView
+              title="Total Dispute"
+              total={120}
+              icon={<RestorePageIcon />}
+              bgColor={blue[900]}
+            />
           </Paper>
         </Grid>
       </Grid>

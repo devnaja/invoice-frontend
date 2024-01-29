@@ -11,7 +11,7 @@ import { Link } from "@mui/material";
 
 export const mainListItems = (
   <React.Fragment>
-    <ListItemButton component={Link} to="/">
+    <ListItemButton component={Link} to="/invoice-frontend">
       <ListItemIcon
         sx={{ color: (theme) => theme.palette.primary.contrastText }}
       >

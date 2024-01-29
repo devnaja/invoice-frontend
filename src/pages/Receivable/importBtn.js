@@ -1,9 +1,8 @@
-import { Box, Modal, Button, styled } from "@mui/material";
+import { Box, Modal, Button } from "@mui/material";
 import React, { useState } from "react";
 import axios from "axios";
 import moment from "moment";
-import { toast, ToastContainer } from "react-toastify";
-import { red, blue, green } from "@mui/material/colors";
+import { toast } from "react-toastify";
 
 const style = {
   position: "absolute",
@@ -225,7 +224,7 @@ function ImportButton() {
               break;
           }
 
-          obj[sHeader] = currentLine[j] == "" ? null : currentLine[j].trim();
+          obj[sHeader] = currentLine[j] === "" ? null : currentLine[j].trim();
           obj["status"] = "pending";
         }
         result.push(obj);

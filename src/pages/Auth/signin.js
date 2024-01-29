@@ -17,18 +17,16 @@ import {
   InputAdornment,
   IconButton,
 } from "@mui/material";
-import axios from "axios";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { Navigate, useNavigate } from "react-router-dom";
-import Swal from "sweetalert2";
-import PublicLayout from "layouts/publicLayout";
 import { auth } from "api/Auth/login";
 import Copyright from "components/copyright";
 import { toast } from "react-toastify";
 
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
+import PublicLayout from "layouts/publicLayout";
 
 const defaultTheme = createTheme();
 
@@ -72,7 +70,7 @@ export default function Signin() {
   };
 
   if (loggedIn) {
-    <Navigate to="/" />;
+    <Navigate to="/invoice-frontend" />;
   } else {
     <Navigate to="/signin" />;
   }

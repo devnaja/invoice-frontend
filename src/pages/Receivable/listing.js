@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
 import { alpha } from "@mui/material/styles";
@@ -18,7 +18,6 @@ import {
   Toolbar,
   IconButton,
   Tooltip,
-  Skeleton,
   Button,
 } from "@mui/material";
 import axios from "axios";
@@ -271,12 +270,6 @@ export default function ListingTable({ data }) {
     .format("YYYY-MM-DDTHH:mm:ss.SSS[Z]");
 
   const handleClickSet = async (value) => {
-    const body = {
-      supplierName: value.supplierName,
-      buyerName: value.buyerName,
-      invNum: value.eInvNum,
-    };
-
     let reqtBody = {
       reqDate: requestDate,
       reqHeader: "Request for " + value.eInvType,
@@ -309,6 +302,7 @@ export default function ListingTable({ data }) {
           },
         }
       );
+      console.log("res", response);
 
       navigate("/request-history");
 
@@ -376,9 +370,9 @@ export default function ListingTable({ data }) {
 
   const isSelected = (id) => selected.indexOf(id) !== -1;
 
-  const handleChange = (event, value) => {
-    setPage(value);
-  };
+  // const handleChange = (event, value) => {
+  //   setPage(value);
+  // };
 
   // const visibleRows = useMemo(
   //   () =>
@@ -390,16 +384,15 @@ export default function ListingTable({ data }) {
   // );
 
   // Function to render skeleton rows
-  const renderSkeletonRows = (count) => {
-    return Array.from({ length: count }, (_, index) => (
-      <TableRow key={index}>
-        <TableCell colSpan={8}>
-          <Skeleton animation="wave" height={48} />
-        </TableCell>
-      </TableRow>
-    ));
-  };
-  console.log("visibleRows", visibleRows);
+  // const renderSkeletonRows = (count) => {
+  //   return Array.from({ length: count }, (_, index) => (
+  //     <TableRow key={index}>
+  //       <TableCell colSpan={8}>
+  //         <Skeleton animation="wave" height={48} />
+  //       </TableCell>
+  //     </TableRow>
+  //   ));
+  // };
 
   return (
     <Box>

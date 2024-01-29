@@ -1,12 +1,5 @@
 import React from "react";
-import {
-  Box,
-  Paper,
-  Typography,
-  Switch,
-  Container,
-  CssBaseline,
-} from "@mui/material";
+import { Box, Paper, Typography, Switch } from "@mui/material";
 
 function AllowImport() {
   return (
