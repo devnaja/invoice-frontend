@@ -52,7 +52,7 @@ export default function Signin() {
     try {
       const result = await auth(data);
       setLoggedIn(true);
-      navigate("/");
+      navigate("/invoice-frontend");
       return result;
     } catch (error) {
       // Handle the error if needed
