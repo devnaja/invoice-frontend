@@ -243,8 +243,6 @@ export default function ListingTable({ data }) {
   let rows = data;
   let visibleRows = data;
 
-  console.log("row", rows);
-  console.log("visibleRows", visibleRows);
   // const [visibleRows, setVisibleRows] = React.useState(data);
   const [order, setOrder] = React.useState("desc");
   const [orderBy, setOrderBy] = React.useState("id");
@@ -304,7 +302,6 @@ export default function ListingTable({ data }) {
         }
       );
       let res = response.data.data;
-      // console.log("res", res);
 
       navigate("/request-history");
 
@@ -346,7 +343,6 @@ export default function ListingTable({ data }) {
 
   const submitRequest = () => {
     // const a = event;
-    // console.log("event", event);
     // try {
     //   const response = await axios.post(
     //     "/request-history",
@@ -435,7 +431,6 @@ export default function ListingTable({ data }) {
   );
 
   const handleChange = (event, value) => {
-    console.log("event", event);
     setPage(value);
   };
 

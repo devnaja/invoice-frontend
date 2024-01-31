@@ -2,7 +2,7 @@ import { Box, Modal, Button } from "@mui/material";
 import React, { useState } from "react";
 import axios from "axios";
 import moment from "moment";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 
 const style = {
   position: "absolute",
@@ -224,7 +224,7 @@ function ImportButton() {
               break;
           }
 
-          obj[sHeader] = currentLine[j] == "" ? null : currentLine[j].trim();
+          obj[sHeader] = currentLine[j] === "" ? null : currentLine[j].trim();
         }
         result.push(obj);
       } else {
@@ -247,7 +247,6 @@ function ImportButton() {
       });
 
       reader.onload = function (event) {
-        console.log(event.target.result);
         const csvOutput = event.target.result;
 
         const jsonData = convertCSVToJson(csvOutput);
@@ -263,7 +262,6 @@ function ImportButton() {
 
     try {
       for (const dataItem of jsonData) {
-        console.log("dataItem", dataItem);
         const response = await axios.post(
           "/transactions",
           { data: dataItem }, // Send each object as payload
@@ -275,7 +273,7 @@ function ImportButton() {
           }
         );
 
-        const res = response.data.data;
+        // const res = response.data.data;
       }
 
       toast.success("List payable transactions created successfully.", {

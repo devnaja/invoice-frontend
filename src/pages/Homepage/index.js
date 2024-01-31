@@ -7,9 +7,8 @@ import PrivateLayout from "layouts/privateLayout";
 import TransTypePie from "./pieChart";
 import axios from "axios";
 import StatusView from "./statusView";
-import { blue, green, orange, red, yellow } from "@mui/material/colors";
-import { Typography } from "@mui/material";
-import CardListing from "./cardListing";
+import { blue, orange, red, yellow } from "@mui/material/colors";
+import { Box, FormControl, MenuItem, Select, Typography } from "@mui/material";
 import PendingActionsIcon from "@mui/icons-material/PendingActions";
 import SimCardAlertIcon from "@mui/icons-material/SimCardAlert";
 import WarningIcon from "@mui/icons-material/Warning";
@@ -18,20 +17,23 @@ import RestorePageIcon from "@mui/icons-material/RestorePage";
 export default function Homepage() {
   const [supplierArray, setSupplierArray] = useState([]);
   const [totalAmount, setTotalAmount] = useState();
-  const [invType, setInvType] = useState([]);
+  const [statusType, setStatusType] = useState([
+    { name: "pending", value: 0 },
+    { name: "failed", value: 0 },
+    { name: "rejected", value: 0 },
+    { name: "dispute", value: 0 },
+    { name: "others", value: 0 },
+  ]);
+  const [filterSelected, setFilterSelected] = React.useState("");
+
+  const handleChange = (event) => {
+    setFilterSelected(event.target.value);
+  };
 
   let supplierList = [];
   let amount = 0;
-  let listType = [];
 
   const fetchDataList = async () => {
-    let listType = [
-      { name: "invoice", value: 0 },
-      { name: "debitNote", value: 0 },
-      { name: "creditNote", value: 0 },
-      { name: "refund", value: 0 },
-      { name: "others", value: 0 },
-    ];
     try {
       const response = await axios.get("/transactions", {
         headers: {
@@ -48,34 +50,30 @@ export default function Homepage() {
           amount: item.attributes.prodTotalInclTax,
         });
         amount = amount + item.attributes.prodTotalInclTax;
-
-        if (item.attributes.eInvType === listType.name) {
-        }
       });
 
       for (let transaction of data) {
-        switch (transaction.attributes.eInvType) {
-          case "Invoice":
-            listType[0].value++;
+        switch (transaction.attributes.status) {
+          case "pending":
+            statusType[0].value++;
             break;
-          case "Debit Note":
-            listType[1].value++;
+          case "failed":
+            statusType[1].value++;
             break;
-          case "Credit Note":
-            listType[2].value++;
+          case "rejected":
+            statusType[2].value++;
             break;
-          case "Refund":
-            listType[3].value++;
+          case "dispute":
+            statusType[3].value++;
             break;
           default:
-            listType[4].value++;
+            statusType[4].value++;
             break;
         }
       }
 
-      console.log("list", listType);
       // Convert the map back to an array of grouped objects
-      setInvType(listType);
+      setStatusType(statusType);
       setTotalAmount(amount);
       setSupplierArray(supplierList);
     } catch (error) {
@@ -87,17 +85,29 @@ export default function Homepage() {
     fetchDataList();
   }, []);
 
-  // const user = React.useContext(useUser);
-  // console.log("user", user);
   return (
     <PrivateLayout>
-      {/* <Container sx={{ mt: 4, mb: 4 }}> */}
-      <Typography mb={2} sx={{ fontSize: "26px", fontWeight: "bold" }}>
-        Number of Transactions
-      </Typography>
-      <Grid container spacing={5}>
-        {/* Number of transactions */}
-        <Grid item xs={12} md={4} lg={3}>
+      <Box display="flex" justifyContent="space-between">
+        <Typography mb={2} sx={{ fontSize: "26px", fontWeight: "bold" }}>
+          Number of Transactions
+        </Typography>
+
+        <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
+          <Select
+            value={filterSelected}
+            onChange={handleChange}
+            displayEmpty
+            inputProps={{ "aria-label": "Without label" }}
+          >
+            <MenuItem value="daily">Daily</MenuItem>
+            <MenuItem value="weekly">Weekly</MenuItem>
+            <MenuItem value="monthly">Monthly</MenuItem>
+          </Select>
+        </FormControl>
+      </Box>
+
+      <Grid container spacing={{ xs: 1, md: 2, lg: 5 }}>
+        <Grid item xs={12} md={6} lg={3}>
           <Paper
             sx={{
               display: "flex",
@@ -106,13 +116,13 @@ export default function Homepage() {
           >
             <StatusView
               title="Total Pending"
-              total={120}
+              total={statusType[0].value}
               icon={<PendingActionsIcon />}
               bgColor={yellow[700]}
             />
           </Paper>
         </Grid>
-        <Grid item xs={12} md={4} lg={3}>
+        <Grid item xs={12} md={6} lg={3}>
           <Paper
             sx={{
               display: "flex",
@@ -121,13 +131,13 @@ export default function Homepage() {
           >
             <StatusView
               title="Total Failed"
-              total={120}
+              total={statusType[1].value}
               icon={<SimCardAlertIcon />}
               bgColor={orange[800]}
             />
           </Paper>
         </Grid>
-        <Grid item xs={12} md={4} lg={3}>
+        <Grid item xs={12} md={6} lg={3}>
           <Paper
             sx={{
               display: "flex",
@@ -136,13 +146,13 @@ export default function Homepage() {
           >
             <StatusView
               title="Total Rejected"
-              total={120}
+              total={statusType[2].value}
               icon={<WarningIcon />}
               bgColor={red[900]}
             />
           </Paper>
         </Grid>
-        <Grid item xs={12} md={4} lg={3}>
+        <Grid item xs={12} md={6} lg={3}>
           <Paper
             sx={{
               display: "flex",
@@ -151,7 +161,7 @@ export default function Homepage() {
           >
             <StatusView
               title="Total Dispute"
-              total={120}
+              total={statusType[3].value}
               icon={<RestorePageIcon />}
               bgColor={blue[900]}
             />
@@ -176,7 +186,7 @@ export default function Homepage() {
             <Chart data={supplierArray} />
           </Paper>
         </Grid>
-        {/* Recent Deposits */}
+
         <Grid item xs={12} md={6} lg={5}>
           <Paper
             sx={{
@@ -198,11 +208,10 @@ export default function Homepage() {
               height: 240,
             }}
           >
-            <TransTypePie datas={invType} />
+            <TransTypePie datas={statusType} />
           </Paper>
         </Grid>
       </Grid>
-      {/* </Container> */}
     </PrivateLayout>
   );
 }

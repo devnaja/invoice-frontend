@@ -5,7 +5,6 @@
 // };
 
 // const isLoggedIn = () => {
-//   console.log("isLoggedIn", Boolean(localStorage.getItem("isLoggedIn")));
 //   return Boolean(localStorage.getItem("isLoggedIn"));
 // };
 

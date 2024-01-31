@@ -13,8 +13,6 @@ export default function ProductTable(props) {
   const rows = props.rows;
   const dateFormatter = DateFormatter();
 
-  // console.log("rows", rows);
-
   return (
     <TableContainer
       component={Paper}

@@ -15,8 +15,6 @@ export default function TableList(props) {
   const rows = props.rows;
   const dateFormatter = DateFormatter();
 
-  console.log("rows", rows);
-
   return (
     <TableContainer component={Paper}>
       <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table">

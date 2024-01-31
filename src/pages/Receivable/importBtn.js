@@ -247,7 +247,6 @@ function ImportButton() {
       });
 
       reader.onload = function (event) {
-        console.log(event.target.result);
         const csvOutput = event.target.result;
 
         const jsonData = convertCSVToJson(csvOutput);

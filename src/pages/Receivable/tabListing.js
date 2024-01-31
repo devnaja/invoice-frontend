@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
-import { Typography, styled } from "@mui/material";
+import { styled } from "@mui/material";
 import Box from "@mui/material/Box";
 import ListingTable from "./listing";
 import axios from "axios";
@@ -22,11 +22,7 @@ function CustomTabPanel(props) {
       aria-labelledby={`simple-tab-${index}`}
       {...other}
     >
-      {value === index && (
-        <Box sx={{ p: 3 }}>
-          <Typography>{children}</Typography>
-        </Box>
-      )}
+      {value === index && <Box sx={{ p: 3 }}>{children}</Box>}
     </div>
   );
 }
@@ -143,7 +139,6 @@ export default function TabListing() {
       const groupedInvoicesArray = [...groupedByInvoiceAndCompany.values()];
 
       setDataList(groupedInvoicesArray);
-      // console.log("groupedInvoicesArray", groupedInvoicesArray);
     } catch (error) {
       console.error("An error occurred:", error.response);
     }

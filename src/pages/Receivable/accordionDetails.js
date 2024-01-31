@@ -78,7 +78,6 @@ export default function DetailsInfo() {
     let requestInfo = [];
 
     if (dataRows.request) {
-      console.log(1);
       requestInfo = [
         {
           tranId: dataRows.id,
@@ -99,7 +98,6 @@ export default function DetailsInfo() {
         },
       ];
     } else {
-      console.log(2);
       requestInfo = [];
     }
 

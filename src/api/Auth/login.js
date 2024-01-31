@@ -1,8 +1,6 @@
 import axios from "axios";
-import Swal from "sweetalert2";
-import React, { useState } from "react";
 
-import { toast, ToastContainer, Bounce } from "react-toastify";
+import { toast, Bounce } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 export const auth = async (params) => {
@@ -38,7 +36,6 @@ export const auth = async (params) => {
         transition: Bounce,
       }
     );
-    console.log("An error occurred:", error.response);
 
     throw error; // Re-throw the error if needed
   }

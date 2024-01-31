@@ -20,7 +20,6 @@ function History() {
       );
 
       const data = response.data.data;
-      console.log("data", data);
 
       setHistoryTransactions(data);
     } catch (error) {

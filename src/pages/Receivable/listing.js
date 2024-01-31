@@ -19,6 +19,7 @@ import {
   IconButton,
   Tooltip,
   Button,
+  Chip,
 } from "@mui/material";
 import axios from "axios";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -247,7 +248,6 @@ export default function ListingTable({ data }) {
   const [visibleRows, setVisibleRows] = useState([]);
 
   useEffect(() => {
-    console.log("data", data);
     // Update visibleRows when the data prop changes
     setVisibleRows(data);
     setVisibleRows(
@@ -302,7 +302,6 @@ export default function ListingTable({ data }) {
           },
         }
       );
-      console.log("res", response);
 
       navigate("/request-history");
 
@@ -410,97 +409,95 @@ export default function ListingTable({ data }) {
                 rowCount={rows.length}
               />
               {visibleRows.length === 0 ? (
-                <TableRow>
-                  <TableCell colSpan={12}>
-                    <Typography textAlign="center" color="lightgray">
-                      No Data Available
-                    </Typography>
-                  </TableCell>
-                </TableRow>
+                <TableBody>
+                  <TableRow>
+                    <TableCell colSpan={12}>
+                      <Typography textAlign="center" color="lightgray">
+                        No Data Available
+                      </Typography>
+                    </TableCell>
+                  </TableRow>
+                </TableBody>
               ) : (
-                // Render actual rows
-                <>
-                  <TableBody>
-                    {visibleRows.map((row, index) => {
-                      const isItemSelected = isSelected(row.id);
-                      const labelId = `enhanced-table-checkbox-${index}`;
+                <TableBody>
+                  {visibleRows.map((row, index) => {
+                    const isItemSelected = isSelected(row.id);
+                    const labelId = `enhanced-table-checkbox-${index}`;
 
-                      return (
-                        <TableRow hover key={row.id}>
-                          <TableCell
-                            padding="checkbox"
-                            selected={isItemSelected}
-                            sx={{ cursor: "pointer" }}
-                            onClick={(event) => handleClick(event, row.id)}
-                            role="checkbox"
-                            aria-checked={isItemSelected}
-                            tabIndex={-1}
+                    return (
+                      <TableRow hover key={row.id}>
+                        <TableCell
+                          padding="checkbox"
+                          selected={isItemSelected}
+                          sx={{ cursor: "pointer" }}
+                          onClick={(event) => handleClick(event, row.id)}
+                          role="checkbox"
+                          aria-checked={isItemSelected}
+                          tabIndex={-1}
+                        >
+                          <Checkbox
+                            color="primary"
+                            checked={isItemSelected}
+                            inputProps={{
+                              "aria-labelledby": labelId,
+                            }}
+                          />
+                        </TableCell>
+                        {/* <TableCell>{row.id}</TableCell> */}
+
+                        <TableCell>
+                          {row.company?.data?.attributes?.name || "-"}
+                        </TableCell>
+                        <TableCell>{row.eInvNum}</TableCell>
+                        <TableCell>{row.buyerName}</TableCell>
+                        <TableCell>{row.buyEmail}</TableCell>
+
+                        <TableCell>{row.eInvType}</TableCell>
+                        <TableCell>
+                          <Chip label={row.status} color="primary" />
+                        </TableCell>
+                        <TableCell>
+                          {dateFormatter.format(row.createdAt)}
+                        </TableCell>
+
+                        <TableCell display="flex">
+                          <Box></Box>
+                          <Link
+                            to={`/account-receivable/${row.id}`}
+                            state={{ dataRows: { row } }}
                           >
-                            <Checkbox
-                              color="primary"
-                              checked={isItemSelected}
-                              inputProps={{
-                                "aria-labelledby": labelId,
-                              }}
-                            />
-                          </TableCell>
-                          {/* <TableCell>{row.id}</TableCell> */}
-
-                          <TableCell>
-                            {row.company?.data?.attributes?.name || "-"}
-                          </TableCell>
-                          <TableCell>{row.eInvNum}</TableCell>
-                          <TableCell>{row.buyerName}</TableCell>
-                          <TableCell>{row.buyEmail}</TableCell>
-
-                          <TableCell>{row.eInvType}</TableCell>
-                          <TableCell>{row.status}</TableCell>
-                          <TableCell>
-                            {dateFormatter.format(row.createdAt)}
-                          </TableCell>
-
-                          <TableCell display="flex">
-                            <Box></Box>
-                            <Link
-                              to={`/account-receivable/${row.id}`}
-                              state={{ dataRows: { row } }}
-                            >
-                              <Button size="small">
-                                <Tooltip
-                                  title="View Transaction"
-                                  placement="right"
-                                >
-                                  <VisibilityIcon />
-                                </Tooltip>
-                              </Button>
-                            </Link>
-
-                            {row.status === "pending" && (
-                              <Button
-                                size="small"
-                                onClick={() => {
-                                  handleClickSet(row);
-                                }}
+                            <Button size="small">
+                              <Tooltip
+                                title="View Transaction"
+                                placement="right"
                               >
-                                <Tooltip
-                                  title="Submit request"
-                                  placement="right"
-                                >
-                                  <IosShareIcon />
-                                </Tooltip>
-                              </Button>
-                            )}
-                          </TableCell>
-                        </TableRow>
-                      );
-                    })}
-                    {emptyRows > 0 && (
-                      <TableRow>
-                        <TableCell colSpan={11} />
+                                <VisibilityIcon />
+                              </Tooltip>
+                            </Button>
+                          </Link>
+
+                          {row.status === "pending" && (
+                            <Button
+                              size="small"
+                              onClick={() => {
+                                handleClickSet(row);
+                              }}
+                            >
+                              <Tooltip title="Submit request" placement="right">
+                                <IosShareIcon />
+                              </Tooltip>
+                            </Button>
+                          )}
+                        </TableCell>
                       </TableRow>
-                    )}
-                  </TableBody>
-                </>
+                    );
+                  })}
+                  {emptyRows > 0 && (
+                    <TableRow>
+                      <TableCell colSpan={11} />
+                    </TableRow>
+                  )}
+                </TableBody>
               )}
             </Table>
           </TableContainer>

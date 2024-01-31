@@ -50,7 +50,6 @@ export default function SignUp() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("data", data);
 
     const response = emailjs.send(service_id, template_id, data, public_key);
 
@@ -63,7 +62,6 @@ export default function SignUp() {
       },
       success: {
         render({ data }) {
-          console.log("dataaaa", data);
           navigate("/signin");
           return "Your registration will be procees within 3 days of working day.";
         },

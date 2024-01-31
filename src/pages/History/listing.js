@@ -261,7 +261,6 @@ export default function ListingTable({ data }) {
   const dateFormatter = DateFormatter();
   rows = data;
   let visibleRows = data;
-  console.log("1", visibleRows);
 
   const [order, setOrder] = React.useState("desc");
   const [orderBy, setOrderBy] = React.useState("id");

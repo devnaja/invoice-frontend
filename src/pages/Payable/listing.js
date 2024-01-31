@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
 import { alpha } from "@mui/material/styles";
@@ -18,7 +18,6 @@ import {
   Toolbar,
   IconButton,
   Tooltip,
-  Skeleton,
   Button,
 } from "@mui/material";
 import axios from "axios";
@@ -248,7 +247,6 @@ export default function ListingTable({ data }) {
   const [visibleRows, setVisibleRows] = useState([]);
 
   useEffect(() => {
-    console.log("data", data);
     // Update visibleRows when the data prop changes
     setVisibleRows(data);
     setVisibleRows(
@@ -271,12 +269,6 @@ export default function ListingTable({ data }) {
     .format("YYYY-MM-DDTHH:mm:ss.SSS[Z]");
 
   const handleClickSet = async (value) => {
-    const body = {
-      supplierName: value.supplierName,
-      buyerName: value.buyerName,
-      invNum: value.eInvNum,
-    };
-
     let reqtBody = {
       reqDate: requestDate,
       reqHeader: "Request for " + value.eInvType,
@@ -311,6 +303,8 @@ export default function ListingTable({ data }) {
       );
 
       navigate("/request-history");
+
+      console.log("response", response);
 
       toast.success("Request has been submitted.", {
         position: "top-right",
@@ -389,140 +383,117 @@ export default function ListingTable({ data }) {
   //   [order, orderBy, page, rowsPerPage]
   // );
 
-  // Function to render skeleton rows
-  const renderSkeletonRows = (count) => {
-    return Array.from({ length: count }, (_, index) => (
-      <TableRow key={index}>
-        <TableCell colSpan={8}>
-          <Skeleton animation="wave" height={48} />
-        </TableCell>
-      </TableRow>
-    ));
-  };
-
-  console.log("visibleRows", visibleRows);
-
   return (
-    <Box>
-      <Box sx={{}}>
-        <Paper sx={{ width: "100%", mb: 2 }}>
-          <EnhancedTableToolbar numSelected={selected.length} />
-          <TableContainer>
-            <Table aria-labelledby="tableTitle">
-              <EnhancedTableHead
-                numSelected={selected.length}
-                order={order}
-                orderBy={orderBy}
-                onSelectAllClick={handleSelectAllClick}
-                onRequestSort={handleRequestSort}
-                rowCount={rows.length}
-              />
-              {visibleRows.length === 0 ? (
-                <TableRow>
-                  <TableCell colSpan={12}>
-                    <Typography textAlign="center" color="lightgray">
-                      No Data Available
-                    </Typography>
-                  </TableCell>
-                </TableRow>
-              ) : (
-                // Render actual rows
-                <>
-                  <TableBody>
-                    {visibleRows.map((row, index) => {
-                      const isItemSelected = isSelected(row.id);
-                      const labelId = `enhanced-table-checkbox-${index}`;
-
-                      return (
-                        <TableRow hover key={row.id}>
-                          <TableCell
-                            padding="checkbox"
-                            selected={isItemSelected}
-                            sx={{ cursor: "pointer" }}
-                            onClick={(event) => handleClick(event, row.id)}
-                            role="checkbox"
-                            aria-checked={isItemSelected}
-                            tabIndex={-1}
-                          >
-                            <Checkbox
-                              color="primary"
-                              checked={isItemSelected}
-                              inputProps={{
-                                "aria-labelledby": labelId,
-                              }}
-                            />
-                          </TableCell>
-                          {/* <TableCell>{row.id}</TableCell> */}
-
-                          <TableCell>
-                            {row.company?.data?.attributes?.name || "-"}
-                          </TableCell>
-                          <TableCell>{row.eInvNum}</TableCell>
-                          <TableCell>{row.supplierName}</TableCell>
-                          <TableCell>{row.supEmail}</TableCell>
-
-                          <TableCell>{row.eInvType}</TableCell>
-                          <TableCell>{row.status}</TableCell>
-                          <TableCell>
-                            {dateFormatter.format(row.createdAt)}
-                          </TableCell>
-
-                          <TableCell display="flex">
-                            <Box></Box>
-                            <Link
-                              to={`/account-payable/${row.id}`}
-                              state={{ dataRows: { row } }}
-                            >
-                              <Button size="small">
-                                <Tooltip
-                                  title="View Transaction"
-                                  placement="right"
-                                >
-                                  <VisibilityIcon />
-                                </Tooltip>
-                              </Button>
-                            </Link>
-
-                            {row.status === "pending" && (
-                              <Button
-                                size="small"
-                                onClick={() => {
-                                  handleClickSet(row);
-                                }}
-                              >
-                                <Tooltip
-                                  title="Submit request"
-                                  placement="right"
-                                >
-                                  <IosShareIcon />
-                                </Tooltip>
-                              </Button>
-                            )}
-                          </TableCell>
-                        </TableRow>
-                      );
-                    })}
-                    {emptyRows > 0 && (
-                      <TableRow>
-                        <TableCell colSpan={11} />
-                      </TableRow>
-                    )}
-                  </TableBody>
-                </>
-              )}
-            </Table>
-          </TableContainer>
-          <TablePagination
-            rowsPerPageOptions={[1, 3, 5]}
-            component="div"
-            count={rows.length}
-            rowsPerPage={rowsPerPage}
-            page={page}
-            onPageChange={handleChangePage}
-            onRowsPerPageChange={handleChangeRowsPerPage}
+    <Paper sx={{ width: "100%", mb: 2 }}>
+      <EnhancedTableToolbar numSelected={selected.length} />
+      <TableContainer>
+        <Table aria-labelledby="tableTitle">
+          <EnhancedTableHead
+            numSelected={selected.length}
+            order={order}
+            orderBy={orderBy}
+            onSelectAllClick={handleSelectAllClick}
+            onRequestSort={handleRequestSort}
+            rowCount={rows.length}
           />
-        </Paper>
-      </Box>
-    </Box>
+
+          {visibleRows.length === 0 ? (
+            <TableBody>
+              <TableRow>
+                <TableCell colSpan={12}>
+                  <Typography textAlign="center" color="lightgray">
+                    No Data Available
+                  </Typography>
+                </TableCell>
+              </TableRow>
+            </TableBody>
+          ) : (
+            // Render actual rows
+            <>
+              <TableBody>
+                {visibleRows.map((row, index) => {
+                  const isItemSelected = isSelected(row.id);
+                  const labelId = `enhanced-table-checkbox-${index}`;
+
+                  return (
+                    <TableRow hover key={row.id}>
+                      <TableCell
+                        padding="checkbox"
+                        selected={isItemSelected}
+                        sx={{ cursor: "pointer" }}
+                        onClick={(event) => handleClick(event, row.id)}
+                        role="checkbox"
+                        aria-checked={isItemSelected}
+                        tabIndex={-1}
+                      >
+                        <Checkbox
+                          color="primary"
+                          checked={isItemSelected}
+                          inputProps={{
+                            "aria-labelledby": labelId,
+                          }}
+                        />
+                      </TableCell>
+                      <TableCell>
+                        {row.company?.data?.attributes?.name || "-"}
+                      </TableCell>
+                      <TableCell>{row.eInvNum}</TableCell>
+                      <TableCell>{row.supplierName}</TableCell>
+                      <TableCell>{row.supEmail}</TableCell>
+
+                      <TableCell>{row.eInvType}</TableCell>
+                      <TableCell>{row.status}</TableCell>
+                      <TableCell>
+                        {dateFormatter.format(row.createdAt)}
+                      </TableCell>
+
+                      <TableCell display="flex">
+                        <Link
+                          to={`/account-payable/${row.id}`}
+                          state={{ dataRows: { row } }}
+                        >
+                          <Button size="small">
+                            <Tooltip title="View Transaction" placement="right">
+                              <VisibilityIcon />
+                            </Tooltip>
+                          </Button>
+                        </Link>
+
+                        {row.status === "pending" && (
+                          <Button
+                            size="small"
+                            onClick={() => {
+                              handleClickSet(row);
+                            }}
+                          >
+                            <Tooltip title="Submit request" placement="right">
+                              <IosShareIcon />
+                            </Tooltip>
+                          </Button>
+                        )}
+                      </TableCell>
+                    </TableRow>
+                  );
+                })}
+                {emptyRows > 0 && (
+                  <TableRow>
+                    <TableCell colSpan={11} />
+                  </TableRow>
+                )}
+              </TableBody>
+            </>
+          )}
+        </Table>
+      </TableContainer>
+      <TablePagination
+        rowsPerPageOptions={[1, 3, 5]}
+        component="div"
+        count={rows.length}
+        rowsPerPage={rowsPerPage}
+        page={page}
+        onPageChange={handleChangePage}
+        onRowsPerPageChange={handleChangeRowsPerPage}
+      />
+    </Paper>
   );
 }

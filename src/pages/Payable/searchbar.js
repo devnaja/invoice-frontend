@@ -13,7 +13,6 @@ function SearchBar(props) {
   };
 
   const handleInput = (e) => {
-    // console.log(e.target.value);
     setInput(e.target.value.toLowerCase());
     sendDataToParent(input);
   };

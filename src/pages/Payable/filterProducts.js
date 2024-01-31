@@ -4,7 +4,6 @@ import { Paper, Box, Typography } from "@mui/material";
 
 export default function FilterPrducts({ searchstring, list }) {
   const filteredList = list.filter((element) => {
-    // console.log(element);
     if (searchstring === "") {
       return element;
     } else {

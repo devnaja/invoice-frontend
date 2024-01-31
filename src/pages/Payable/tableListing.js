@@ -65,8 +65,6 @@ export default function TableListing({ getData, data }) {
       );
 
       const data = response.data.data;
-      // console.log("data", data);
-      console.log("masuk");
 
       data.forEach((item) => {
         const key = `${item.attributes.eInvNum}`;

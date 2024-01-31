@@ -37,7 +37,6 @@ const DetailsInfoPayable = () => {
 
   const dateFormatter = DateFormatter();
   const structredList = async (data) => {
-    console.log("dataRows", data.row);
     const dataRows = data.row;
     const invoiceInfo = {
       id: dataRows.id,
@@ -77,7 +76,6 @@ const DetailsInfoPayable = () => {
     };
 
     const productInfo = dataRows.products;
-    console.log("products", productInfo);
 
     setData({
       invoiceInfo,

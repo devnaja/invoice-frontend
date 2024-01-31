@@ -6,7 +6,6 @@ import { Box } from "@mui/material";
 export default function PaginationComponent(props) {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(1);
-  console.log("props", props);
   const value = props.data.pagination;
 
   const handleChangePage = (event, newPage) => {

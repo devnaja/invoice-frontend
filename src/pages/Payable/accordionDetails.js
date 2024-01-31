@@ -1,13 +1,5 @@
 import React, { useState, useEffect } from "react";
-import {
-  Divider,
-  Grid,
-  Paper,
-  Typography,
-  Box,
-  CssBaseline,
-  Chip,
-} from "@mui/material";
+import { Grid, Typography, Box } from "@mui/material";
 import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
@@ -35,8 +27,6 @@ const DetailItem = ({ label, value }) => (
 export default function DetailsInfo() {
   const location = useLocation();
 
-  const labelWidth = 280;
-
   const [data, setData] = useState({
     invoiceInfo: {},
     supplierInfo: {},
@@ -48,6 +38,7 @@ export default function DetailsInfo() {
   const dateFormatter = DateFormatter();
   const structredList = async (data) => {
     const dataRows = data.row;
+
     const invoiceInfo = {
       id: dataRows.id,
       type: dataRows.eInvType,
@@ -86,26 +77,31 @@ export default function DetailsInfo() {
     };
 
     const productInfo = dataRows.products;
-    const requestInfo = [
-      {
-        tranId: dataRows.id,
-        invNum: dataRows.eInvNum,
-        id: dataRows.request.id,
-        reqHeader: dataRows.request.attributes.reqHeader,
-        reqBody: dataRows.request.attributes.reqBody,
-        reqDate: dataRows.request.attributes.reqDate,
-        reqParam: dataRows.request.attributes.reqParam,
-        reqUrl: dataRows.request.attributes.reqUrl,
-        reqUrl: dataRows.request.attributes.reqUrl,
-        rtnHeader: dataRows.request.attributes.rtnHeader,
-        rtnBody: dataRows.request.attributes.rtnBody,
-        rtnStatusCode: dataRows.request.attributes.rtnStatusCode,
-        rtnDate: dataRows.request.attributes.rtnDate,
-        createdAt: dataRows.request.attributes.createdAt,
-        publishedAt: dataRows.request.attributes.publishedAt,
-        updatedAt: dataRows.request.attributes.updatedAt,
-      },
-    ];
+
+    let requestInfo = [];
+    if (dataRows.request) {
+      requestInfo = [
+        {
+          tranId: dataRows.id,
+          invNum: dataRows.eInvNum,
+          id: dataRows.request.id,
+          reqHeader: dataRows.request.attributes.reqHeader,
+          reqBody: dataRows.request.attributes.reqBody,
+          reqDate: dataRows.request.attributes.reqDate,
+          reqParam: dataRows.request.attributes.reqParam,
+          reqUrl: dataRows.request.attributes.reqUrl,
+          rtnHeader: dataRows.request.attributes.rtnHeader,
+          rtnBody: dataRows.request.attributes.rtnBody,
+          rtnStatusCode: dataRows.request.attributes.rtnStatusCode,
+          rtnDate: dataRows.request.attributes.rtnDate,
+          createdAt: dataRows.request.attributes.createdAt,
+          publishedAt: dataRows.request.attributes.publishedAt,
+          updatedAt: dataRows.request.attributes.updatedAt,
+        },
+      ];
+    } else {
+      requestInfo = [];
+    }
 
     setData({
       invoiceInfo,
